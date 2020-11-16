@@ -1,2 +1,2 @@
-# illustrator-slideshow-template
-Slideshow template for using illustrator-web-component for a slide show.
+# slideshow
+Tool to bootstrap and render slide-shows.

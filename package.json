@@ -1,0 +1,42 @@
+{
+  "name": "@overhide/slideshow",
+  "version": "1.0.0",
+  "description": "Tool to bootstrap and render slide-shows.",
+  "directories": {
+    "example": "example"
+  },
+  "engines": {
+    "node": ">=10.13.0"
+  },
+  "main": "src/main.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/overhide/slideshow.git"
+  },
+  "keywords": [
+    "overhide",
+    "slideshow"
+  ],
+  "author": "overhide",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/overhide/slideshow/issues"
+  },
+  "homepage": "https://github.com/overhide/slideshow#readme",
+  "dependencies": {
+    "ajv": "^6.12.6",
+    "arg": "^4.1.3",
+    "esm": "^3.2.25",
+    "js-yaml": "^3.14.0"
+  },
+  "bin": {
+    "@overhide/slideshow": "bin/slideshow",
+    "slideshow": "bin/slideshow"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}

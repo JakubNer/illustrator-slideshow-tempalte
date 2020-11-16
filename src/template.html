@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Slideshow</title>
+  <style type="text/css">
+    html, body {
+      font-family: "Open Sans";
+      font-size: 16px;
+      width: 100vw;
+      height: 100%;
+      margin: 0px;
+      overflow: hidden;
+    }
+    a {
+      border-bottom: 1px dashed black;
+      color: inherit;
+      text-decoration: none;
+    }
+    a.no-bottom {
+      border-bottom: 0px;
+    }
+    #loading-screen {
+      background: white;
+      width: 100%;
+      height: 100%;
+      z-index: 1000;
+      display: block;
+    }
+    .flow {
+      transition: opacity 0.2s linear 0s;
+      display: none;
+    }
+    .slideshow-container {
+      left: 0%;
+      top: 0px;
+      height: calc(100% - 2em);
+      width: calc(100% - 2em);
+      margin: 1em;
+    }
+    .content-box {
+      left: 0px;
+      top: 0px;
+      width: 1000px;
+      height: 1000px;
+    }
+    .container-box {
+      height: 1000px;
+      width: 2000px;
+    }
+    .landscape-illustration {
+      position: absolute;
+      width: calc(49%);
+      height: 100%;
+      left: 0px;
+      top: 0px;
+    }    
+    .landscape-narration {
+      position: absolute;
+      width: calc(49%);
+      height: 100%;
+      left: calc(51%);
+      top: 0px;
+    }
+
+    @media (orientation: portrait) {
+      .container-box {
+        height: 2000px;
+        width: 1000px;
+      }
+      .portrait-illustration {
+        position: absolute;
+        width: 100%;
+        height: calc(49%);
+        top: 0px;
+        left: 0px;
+      }      
+      .portrait-narration {
+        position: absolute;
+        top: calc(51%);
+        left: 0px;
+        width: 100%;
+        height: calc(49%);
+      }
+    }
+
+  </style>
+
+  <div class="slideshow-container">
+    <div class="container-box jj-scalable">
+      <div class="landscape-illustration portrait-illustration" id="illustration-c">
+        <div class="content-box" id="illustration">
+
+          <!--%SVGS%-->
+
+        </div>  
+      </div>
+
+      <div class="landscape-narration portrait-narration" id="narration-c">
+        <div class="content-box" id="narration">
+        </div>
+      </div>
+    </div>      
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.11.0/underscore-min.js" integrity="sha512-wBiNJt1JXeA/ra9F8K2jyO4Bnxr0dRPsy7JaMqSlxqTjUGHe1Z+Fm5HMjCWqkIYvp/oCbdJEivZ5pLvAtK0csQ==" crossorigin="anonymous"></script>  
+  <script src="https://cdn.jsdelivr.net/gh/JakubNer/illustrator-web-component/resources/public/js/illustrator.js" crossorigin="anonymous"></script>
+  <script>
+    var delay = function(t) {
+      return new Promise(resolve => setTimeout(resolve.bind(null), t));
+    };
+  </script>
+  <script>
+    /** ILLUSTRATOR DEFINITION **/
+
+    /* Setup all narration animation events below: */
+    kundel.illustrator.register();
+    illustration = {'narration': {...'%NARRATION%', 'target': 'illustration'}};
+  </script>
+  <script>
+    /** illustrator INITIALIZATION **/
+    (function() {
+      var illustrator = document.getElementById('narration');
+      var value = illustration['narration'];
+
+      illustrator.addEventListener('timeline', function(e) {
+        console.log("illustrator timeline (e.id: ", e.id, ")");
+        if (e.id == 'PREVIOUS_BEFORE_FIRST') {
+          console.log("at start");
+          return;
+        } else if (e.id == 'NEXT_AFTER_LAST') {
+          console.log("at end");
+          return;
+        }
+
+        _.each(document.getElementsByClassName('flow'), victim => {
+          victim.style.opacity = 0;
+        });
+        var target = document.getElementById(e.id);
+        if (target) {
+          target.style.visibility = 'hidden';
+          target.style.display = 'none';
+          target.style.opacity = 1;
+          _.each(target.childNodes, child => {
+            if (child.nodeType == Node.ELEMENT_NODE) {
+              child.style.webkitAnimation = 'none';
+              child.style.animation = 'none';
+            }
+          });
+        } else {
+          console.log("WARNING! element from illustrator doesn't match any DIV ID: " + e.id);
+        }
+        delay(200)
+          .then(() => {
+            _.each(document.getElementsByClassName('flow'), victim => {
+              victim.style.visibility = 'hidden';
+              victim.style.display = 'none';
+            });
+            if (target) {
+              target.style.visibility = 'visible';
+              target.style.display = 'block';
+              _.each(target.childNodes, child => {
+                if (child.nodeType == Node.ELEMENT_NODE) {
+                  child.style.webkitAnimation = '';
+                  child.style.animation = '';
+                }
+              });
+            }
+          });
+      }, true);
+
+      illustrator.setAttribute("sections", JSON.stringify(value.illustration));
+      illustrator.setAttribute("font-size-min--section", value.min);
+      illustrator.setAttribute("font-size-max--section", value.max);
+      illustrator.setAttribute("next-hint", "press spacebar or arrow keys");
+      kundel.illustrator.created(illustrator);
+      kundel.illustrator.goto_start(illustrator);
+    })();
+  </script>  
+  <script>
+    var illustrator = document.getElementById('narration');
+
+    // progress forward through content
+    var forward = function() {
+      console.log('forward');
+      kundel.illustrator.goto_next(illustrator);
+    };
+     // progress backward through content
+    var backward = function() {
+      console.log('backward');
+      kundel.illustrator.goto_previous(illustrator);
+    };
+
+    /** KEYBOARD BINDINGS **/
+    document.onkeydown = function(e) {
+        switch (e.key) {
+          case 'ArrowRight':
+            forward();
+            break;
+          case 'ArrowLeft':
+            backward();
+            break;
+          case 'ArrowUp':
+            backward();
+            break;
+          case 'ArrowDown':
+            forward();
+            break;
+          case ' ':
+            forward();
+            break;
+        }
+      }
+  </script>
+  <script>
+    /** RESCALE & CENTER ALL jj-scalable DIVs **/
+
+     // divs with .jj-scalable class can be designed using pixel offsets and absolute coordinates
+     // these will scale to their container
+
+     // these will be centered in their container
+    var rescale_scalables = function() {
+      var elements = document.getElementsByClassName("jj-scalable");
+      _.each(elements, function(element) {
+        var container = element.parentElement;
+        var scale_height = container.offsetHeight / element.offsetHeight;
+        var scale_width = container.offsetWidth / element.offsetWidth;
+        var scale = Math.min(scale_height, scale_width);
+        var translate_x = (-1 * ((element.offsetWidth - (element.offsetWidth * scale)) / 2)) / scale;
+        var translate_y = (-1 * ((element.offsetHeight - (element.offsetHeight * scale)) / 2)) / scale;
+        var inline_style = 'transform: scale(' + scale + ') translate(' + translate_x + 'px,' + translate_y + 'px);';
+        inline_style = inline_style + ' -webkit-transform: scale(' + scale + ') translate(' + translate_x + 'px,' + translate_y + 'px);';
+        inline_style = inline_style + ' -ms-transform: scale(' + scale + ') translate(' + translate_x + 'px,' + translate_y + 'px);';
+        element.setAttribute('style', inline_style);
+        element.style.position = 'absolute';
+        var top = (container.offsetHeight - (scale * element.offsetHeight)) / 2;
+        var left = (container.offsetWidth - (scale * element.offsetWidth)) / 2;
+        top = (top > 0) ? top : 0;
+        left = (left > 0) ? left : 0;
+        element.style.top = top + 'px';
+        element.style.left = left + 'px';
+      });
+    };
+    window.onload = function() {
+        rescale_scalables();
+        setTimeout(rescale_scalables, 0);
+      }
+      /** WINDOW RESIZING **/
+    window.addEventListener("resize", () => {
+      rescale_scalables();
+    });    
+  </script>  
+</body>
+
+</html>

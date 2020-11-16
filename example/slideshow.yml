@@ -1,0 +1,33 @@
+min: 1em
+max: 2.5em
+illustration:
+- flows:
+  - html: <b>Circle</b> shows up
+    seconds: 2
+    id: show-circle
+  subsections:
+  - flows:
+    - html: Circle turns red.
+      seconds: 2
+      id: circle-red
+    - html: Circle turns green,
+      seconds: 1
+      id: circle-green
+    - html: " then blue."
+      seconds: 1
+      id: circle-blue
+- flows:
+  - html: <em>Square</em> shows up
+    seconds: 2
+    id: show-square
+  subsections:
+  - flows:
+    - html: <a href="www.google.com" target="_blank">Square turns red</a>.
+      seconds: 2
+      id: square-red
+    - html: Square turns green,
+      seconds: 1
+      id: square-green
+    - html: " then blue."
+      seconds: 1
+      id: square-blue
