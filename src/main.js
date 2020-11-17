@@ -183,6 +183,46 @@ function ymlFileHasGoodSyntax(dirname) {
   return true;
 }
 
+function getAllSvgFilesFromYml(dirname) {
+  const contents = getYamlAsJson(dirname);
+  if (!contents) return [];
+  if (!contents.illustration) return [];
+  var result = [];
+  contents.illustration.forEach(i => {
+    if (i.flows) {
+      i.flows.forEach(f => {
+        if (f.id && f.id.length > 0) {
+          result.push(f.id);
+        }
+      });
+    }
+    if (i.subsections) {
+      i.subsections.forEach(s => {
+        if (s.flows) {
+          s.flows.forEach(f => {
+            if (f.id && f.id.length > 0) {
+              result.push(f.id);
+            }
+          });
+        }    
+      });
+    }
+  });
+  return result.map(r => path.resolve(dirname + path.sep + r + '.svg'));
+}
+
+function allSvgFilesFromYmlPresentInFolder(dirname) {
+  const svgsInYml = getAllSvgFilesFromYml(dirname);
+  var allThere = true;
+  svgsInYml.forEach(s => {
+    if (!fs.existsSync(s)) {
+      allThere = false;
+      console.log(`SVG file referenced but not found: ${s}`);
+    }    
+  });
+  return allThere;
+}
+
 function doSeed() {
 
 }
@@ -221,7 +261,12 @@ export function main(args) {
   }
 
   if (!ymlFileHasGoodSyntax(options.folder)) {
-    console.log(`Folder '${options.folder}/${path.basename(getYamlFileName(options.folder))}' must have proper syntax.`);
+    console.log(`'${options.folder}/${path.basename(getYamlFileName(options.folder))}' must have proper syntax.`);
     process.exit();
   }
- }
+
+  if (!allSvgFilesFromYmlPresentInFolder(options.folder)) {
+    console.log(`Not all SVG files referenced in '${options.folder}/${path.basename(getYamlFileName(options.folder))}' are present in '${options.folder}' folder.`);
+    process.exit();    
+  }
+}
