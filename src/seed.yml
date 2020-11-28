@@ -1,0 +1,12 @@
+min: 1em
+max: 2.5em
+illustration:
+- flows:
+  - html: This is a <b>flow</b>.
+    seconds: 2
+    id: first-svg
+  subsections:
+  - flows:
+    - html: This is a <em>subsection flow</em>
+      seconds: 2
+      id: second-svg

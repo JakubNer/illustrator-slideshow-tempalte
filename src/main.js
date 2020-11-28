@@ -223,8 +223,51 @@ function allSvgFilesFromYmlPresentInFolder(dirname) {
   return allThere;
 }
 
-function doSeed() {
+function getSvgReplacementString(dirname) {
+  const svgsInYml = getAllSvgFilesFromYml(dirname);
+  let result = [];
+  svgsInYml.forEach(s => {
+    var id = path.basename(s,path.extname(s));
+    var data = fs.readFileSync(s, 'utf8');
+    var svg = data.match(/<svg\s.*<\/svg>/gs);
+    if (!svg) {
+      console.log(`SVG file \"${s}\" doesn't match regex /<svg\s.*<\/svg>/gs for extraction.`)
+      process.exit();
+    }
+    result.push(`<div id="${id}" class="flow">\n${svg}\n</div>\n`);
+  });
+  return result.join("\n");
+}
 
+function doWrite(dirname) {
+  var template = fs.readFileSync(path.resolve(__dirname, 'template.html'), 'utf8');
+  var svgs = getSvgReplacementString(dirname);
+  var narration = getYamlAsJson(dirname);
+  var output = template.replace("<!--%SVGS%-->",svgs).replace("%NARRATION%",JSON.stringify(narration,null,2));
+  var outputName = getYamlFileName(dirname);
+  outputName = path.basename(outputName,path.extname(outputName));
+  outputName += ".html";
+  fs.writeFileSync(dirname + path.sep + outputName, output);
+}
+
+function doSeed(dirname) {
+  fs.copyFileSync(path.resolve(__dirname, 'seed.yml'), dirname + path.sep + 'slideshow.yml');
+  fs.copyFileSync(path.resolve(__dirname, 'empty-svg.svg'), dirname + path.sep + 'first-svg.svg');
+  fs.copyFileSync(path.resolve(__dirname, 'empty-svg.svg'), dirname + path.sep + 'second-svg.svg');
+  doWrite(dirname);
+  console.log(`
+  Wrote out 'slideshow.yml' and 'empty-svg' into ${dirname}.
+
+  Edit 'slideshow.yml' to create your slides.  Notice how 'first-svg.svg' and
+  'second-svg.svg' SVG files are referenced from the 'id' properties in the 
+  slideshow (sans '.svg' extension).
+
+  Rename/copy 'first-svg.svg'/'second-svg.svg' into more SVG files.  Edit them.  
+  Then use in your slide show by referencing via the 'id' properties.
+
+  Look at 'slideshow.html' to see your slideshow.  Re-run after modifying 'slideshow.yml'
+  and messing around with SVGs as needed.
+  `);
 }
 
 export function main(args) {
@@ -250,7 +293,7 @@ export function main(args) {
     if (!isFolderEmpty(options.folder)) {
       console.log(`Folder '${options.folder}' should be empty before seeding.`);
     } else {
-      doSeed();
+      doSeed(options.folder);
     }
     process.exit();
   }
@@ -269,4 +312,6 @@ export function main(args) {
     console.log(`Not all SVG files referenced in '${options.folder}/${path.basename(getYamlFileName(options.folder))}' are present in '${options.folder}' folder.`);
     process.exit();    
   }
+
+  doWrite(options.folder);
 }

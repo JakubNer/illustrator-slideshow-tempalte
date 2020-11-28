@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Slideshow</title>
+  <style type="text/css">
+    html, body {
+      font-family: "Open Sans";
+      font-size: 16px;
+      width: 100vw;
+      height: 100%;
+      margin: 0px;
+      overflow: hidden;
+    }
+    a {
+      border-bottom: 1px dashed black;
+      color: inherit;
+      text-decoration: none;
+    }
+    a.no-bottom {
+      border-bottom: 0px;
+    }
+    #loading-screen {
+      background: white;
+      width: 100%;
+      height: 100%;
+      z-index: 1000;
+      display: block;
+    }
+    .flow {
+      transition: opacity 0.2s linear 0s;
+      display: none;
+    }
+    .slideshow-container {
+      left: 0%;
+      top: 0px;
+      height: calc(100% - 2em);
+      width: calc(100% - 2em);
+      margin: 1em;
+    }
+    .content-box {
+      left: 0px;
+      top: 0px;
+      width: 1000px;
+      height: 1000px;
+    }
+    .container-box {
+      height: 1000px;
+      width: 2000px;
+    }
+    .landscape-illustration {
+      position: absolute;
+      width: calc(49%);
+      height: 100%;
+      left: 0px;
+      top: 0px;
+    }    
+    .landscape-narration {
+      position: absolute;
+      width: calc(49%);
+      height: 100%;
+      left: calc(51%);
+      top: 0px;
+    }
+
+    @media (orientation: portrait) {
+      .container-box {
+        height: 2000px;
+        width: 1000px;
+      }
+      .portrait-illustration {
+        position: absolute;
+        width: 100%;
+        height: calc(49%);
+        top: 0px;
+        left: 0px;
+      }      
+      .portrait-narration {
+        position: absolute;
+        top: calc(51%);
+        left: 0px;
+        width: 100%;
+        height: calc(49%);
+      }
+    }
+
+  </style>
+
+  <div class="slideshow-container">
+    <div class="container-box jj-scalable">
+      <div class="landscape-illustration portrait-illustration" id="illustration-c">
+        <div class="content-box" id="illustration">
+          <div id="show-circle" class="flow">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="1001px" height="1001px" viewBox="-0.5 -0.5 1001 1001" content="&lt;mxfile host=&quot;Electron&quot; modified=&quot;2020-11-16T00:56:48.561Z&quot; agent=&quot;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/13.9.5 Chrome/85.0.4183.121 Electron/10.1.5 Safari/537.36&quot; etag=&quot;egudo4j8DQUCuv_avIKT&quot; version=&quot;13.9.5&quot; type=&quot;device&quot;&gt;&lt;diagram id=&quot;SO_7Pwdn0zAmYjBRLb9S&quot; name=&quot;Page-1&quot;&gt;pZRbb4MgFIB/jY9NENbLc92lD+vD0q1L9kbkqGToMUin7tcPKlpd03TN8EH4zjmAH8SARXnzpHmZbVGACigRTcDuA0rpMpzblyOtJ+SOdCTVUnRsBHbyGzoY9vQgBVSedcggKiPLKYyxKCA2E8a1xnqalqASE1DyFCbbcGAXcwVnae9SmMxTSkbpG5Bp1i+96CM577M9qDIusB4h9hCwSCOarpc3ESinbyrm8UJ02JmGwvylQLxtyH62XcZbXq6e9+TlNfmY+Vm+uDr4L/abNW2vQOOhEOAmIQFb15k0sCt57KK1PXXLMpMrOwpttzIaPyFChdqSAgubtvZrgDbQXNx8OCixtwkwB6Nbm1KPrJPebTY2PlDuzzodqk82bMcLuUEOvS7HzmKvIlwXw6uyu5+JbJzMdSKV6j0FlCVz95wZtJHFsbkKLMyId+2fen0BW/iS9td4pJ8uV+f2B3iDfDs83fpjbPT3YA8/&lt;/diagram&gt;&lt;/mxfile&gt;"><defs/><g><rect x="0" y="0" width="1000" height="1000" fill="#ffffff" stroke="none" pointer-events="all"/><ellipse cx="500" cy="500" rx="139" ry="139" fill="#f5f5f5" stroke="#666666" pointer-events="all"/></g></svg>      
+          </div>
+          <div id="circle-red" class="flow">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="1001px" height="1001px" viewBox="-0.5 -0.5 1001 1001" content="&lt;mxfile host=&quot;Electron&quot; modified=&quot;2020-11-16T00:59:47.419Z&quot; agent=&quot;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/13.9.5 Chrome/85.0.4183.121 Electron/10.1.5 Safari/537.36&quot; etag=&quot;XwRb9pcjfnlbRnovb0Lb&quot; version=&quot;13.9.5&quot; type=&quot;device&quot;&gt;&lt;diagram id=&quot;SO_7Pwdn0zAmYjBRLb9S&quot; name=&quot;Page-1&quot;&gt;pZRNc4MgEEB/jcfMIOTDc2zaHJpDJ2060xuFVZiiOEiq9tcXKxptJpNmehLe7sL63DEgcVY/GFqIneagAox4HZC7AGO8Chfu0ZLGEzRHHUmN5B0bgb38gg6GPT1KDqVnHbJaKyuLKWQ6z4HZCaPG6GqalmjFJ6CgKUzaaMGeUQVnaa+SW+EpRqP0LchU9Fcv+0hG+2wPSkG5rkaIbAISG61tt8rqGFSrbyrm/kJ06MxAbv9SwF+26DDbrdiOFtHjAT09J28zf8onVUf/xr5Z2/QKjD7mHNpDUEDWlZAW9gVlbbRyX90xYTPldqFbltboD4i10saRXOcube3vAGOhvth8OChx0wQ6A2sal1KNrKPerRgbHyj13zodqk823MILuUEOvi7HneJGEa6LoWXRzWci61bmOpFK9Z4CTJKIAWNnBl3kPVrMF+ifGn0BWfqS5td+pBmvonPLA7xBstuepvsnNvpLkM03&lt;/diagram&gt;&lt;/mxfile&gt;"><defs/><g><rect x="0" y="0" width="1000" height="1000" fill="#ffffff" stroke="none" pointer-events="all"/><ellipse cx="500" cy="500" rx="139" ry="139" fill="#f8cecc" stroke="#b85450" pointer-events="all"/></g></svg>      
+          </div>  
+          <div id="circle-green" class="flow">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="1001px" height="1001px" viewBox="-0.5 -0.5 1001 1001" content="&lt;mxfile host=&quot;Electron&quot; modified=&quot;2020-11-16T01:00:01.942Z&quot; agent=&quot;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/13.9.5 Chrome/85.0.4183.121 Electron/10.1.5 Safari/537.36&quot; etag=&quot;0GdUY-5fcTl0EzPAiwBx&quot; version=&quot;13.9.5&quot; type=&quot;device&quot;&gt;&lt;diagram id=&quot;SO_7Pwdn0zAmYjBRLb9S&quot; name=&quot;Page-1&quot;&gt;pZRRT4MwEIB/DY9LSrsxnofTPbgHM52Jb5Ueo7FwpHQC/nqLFAYuy1x8ov3urj0+LngsyuoHzYt0iwKUR4moPXbnUUqX/sI+WtI4QuakIwctRcdGYCe/oIN+T49SQOlYhwyiMrKYwhjzHGIzYVxrrKZpCSoxAQU/wKSNFuxiruAs7VUKkzpKySh9A/KQ9lcHfSTjfbYDZcoFViPE1h6LNKLpVlkdgWr1TcXcX4gOnWnIzV8KxMuG7GfbZbzlRfi4J0/PydvMnfLJ1dG9sWvWNL0CjcdcQHsI8diqSqWBXcHjNlrZr25ZajJld75dlkbjB0SoUFuSY27TVu4O0Abqi837gxI7TYAZGN3YlGpknfRu07HxgXL3rQ9D9cmGXTghN8ih1+XYU+wownUxvCy6+Uxk3cpcJVKp3pNHmVhAKOZnBm0kpO8sCP6p0RWwwJU0v/YjzXQZnlse4A2S7fY03T+x0V+Crb8B&lt;/diagram&gt;&lt;/mxfile&gt;"><defs/><g><rect x="0" y="0" width="1000" height="1000" fill="#ffffff" stroke="none" pointer-events="all"/><ellipse cx="500" cy="500" rx="139" ry="139" fill="#d5e8d4" stroke="#82b366" pointer-events="all"/></g></svg>      
+          </div>  
+          <div id="circle-blue" class="flow">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="1001px" height="1001px" viewBox="-0.5 -0.5 1001 1001" content="&lt;mxfile host=&quot;Electron&quot; modified=&quot;2020-11-16T01:00:36.846Z&quot; agent=&quot;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/13.9.5 Chrome/85.0.4183.121 Electron/10.1.5 Safari/537.36&quot; etag=&quot;S8sx3ApDpX0l2guJryMg&quot; version=&quot;13.9.5&quot; type=&quot;device&quot;&gt;&lt;diagram id=&quot;SO_7Pwdn0zAmYjBRLb9S&quot; name=&quot;Page-1&quot;&gt;pZRRT4MwEIB/DY9LSquM5+F0D+7BTGfiW6UHNBaOlE7AX2+RwsBlmYtPtN/dtcfHBY9FefOgeZltUYDyKBGNx+48SunSv7WPjrSOkBvSk1RL0bMJ2Mkv6KE/0IMUUDnWI4OojCznMMaigNjMGNca63lagkrMQMlTmLXRgV3MFZykvUphMkcpmaRvQKbZcHUwRHI+ZDtQZVxgPUFs7bFII5p+lTcRqE7fXMz9mejYmYbC/KVAvGzIfrFdxlteho978vScvC3cKZ9cHdwbu2ZNOyjQeCgEdIcQj63qTBrYlTzuorX96pZlJld259tlZTR+QIQKtSUFFjZt5e4AbaA527w/KrHTBJiD0a1NqSfWyeA2mxofKXffOh2rjzbswgm5Qg69LMeeYkcRLovhVdnPZyKbTuYqkUoNnjzKBIcwiU8M2kgQh/Ce/FOjK2CBK2l/7Sea6TI8tTzCKyTb7XG6f2KTvwRbfwM=&lt;/diagram&gt;&lt;/mxfile&gt;"><defs/><g><rect x="0" y="0" width="1000" height="1000" fill="#ffffff" stroke="none" pointer-events="all"/><ellipse cx="500" cy="500" rx="139" ry="139" fill="#dae8fc" stroke="#6c8ebf" pointer-events="all"/></g></svg>       
+          </div>  
+          <div id="show-square" class="flow">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="1002px" height="1002px" viewBox="-0.5 -0.5 1002 1002" content="&lt;mxfile host=&quot;Electron&quot; modified=&quot;2020-11-16T01:01:27.954Z&quot; agent=&quot;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/13.9.5 Chrome/85.0.4183.121 Electron/10.1.5 Safari/537.36&quot; etag=&quot;7KWOCq5QEffzafLNJbny&quot; version=&quot;13.9.5&quot; type=&quot;device&quot;&gt;&lt;diagram id=&quot;SO_7Pwdn0zAmYjBRLb9S&quot; name=&quot;Page-1&quot;&gt;pZNBb4MgFIB/jccuKNH2XNeth3lYunXJbkRehQx9BunU/frhRKtpmrbZSfjee/D4QI/GefOsWSkS5KC8gPDGo49eEPhh6NtPR1pH/CjqSaYl7xk5gZ38AZc40KPkUDnWI4OojCznMMWigNTMGNMa63naARWfgZJlMGujA7uUKThL+5DcCEcDMknfgszEsHU0RHI2ZDtQCcaxniC68WisEU0/ypsYVKdvLubpQnTsTENhbing71uyXyTLNGHl6mVPXt8Onwu3yjdTR3di16xpBwUajwWHbhHi0XUtpIFdydIuWttbt0yYXNmZb4eV0fgFMSrUlhRY2LS12wO0geZi8/6oxL4mwByMbm1KPbFOBrdianykzN11NlafbNiBE3KHHHpdzhUdrCr7V3mQTafwXypcAQ2jh7Avas/IRFewWp7bGuEdsuz09Er/YpO/nW5+AQ==&lt;/diagram&gt;&lt;/mxfile&gt;"><defs/><g><rect x="0" y="0" width="1000" height="1000" fill="#ffffff" stroke="none" pointer-events="all"/><rect x="356.5" y="356.5" width="287" height="287" fill="#ffffff" stroke="#000000" pointer-events="all"/></g></svg>        
+          </div>
+          <div id="square-red" class="flow">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="1002px" height="1002px" viewBox="-0.5 -0.5 1002 1002" content="&lt;mxfile host=&quot;Electron&quot; modified=&quot;2020-11-16T01:01:44.314Z&quot; agent=&quot;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/13.9.5 Chrome/85.0.4183.121 Electron/10.1.5 Safari/537.36&quot; etag=&quot;gEiyw-35KlGJSyrG4HEw&quot; version=&quot;13.9.5&quot; type=&quot;device&quot;&gt;&lt;diagram id=&quot;SO_7Pwdn0zAmYjBRLb9S&quot; name=&quot;Page-1&quot;&gt;pZRBT4MwFIB/DceZQoVxHk53cAcznYm32j5oY6GkdAL+eosUBiHLNJ5ov/de+/q1wcNJ3jxoUvK9YiC9ALHGw3deEPhh6NtPR1pH/CjqSaYF6xk6g4P4Apc40JNgUDnWI6OUNKKcQ6qKAqiZMaK1qudpqZJsBkqSwayNDhwokbBIexXMcEcDNEnfgcj4sHU0RHIyZDtQccJUPUF46+FEK2X6Ud4kIDt9czH3F6JjZxoK85sC9rJDx9V+TfekjB+P6Ok5fVu5VT6JPLkTu2ZNOyjQ6lQw6BZBHt7UXBg4lIR20dreumXc5NLOfDusjFYfkCiptCWFKmzaxu0B2kBzsXl/VGJfE6gcjG5tSj2xjga3fGp8pMTddTZWn23YgRPyBzn4upwrOkhV9q8yFU2ncJMKKQc7XoDTmAKlC2828h6HtyH6pzxXgMPoJuyL2gWZCA7i9dLvCP+g107P7/onNvk/4O03&lt;/diagram&gt;&lt;/mxfile&gt;"><defs/><g><rect x="0" y="0" width="1000" height="1000" fill="#ffffff" stroke="none" pointer-events="all"/><rect x="356.5" y="356.5" width="287" height="287" fill="#f8cecc" stroke="#b85450" pointer-events="all"/></g></svg>
+          </div>  
+          <div id="square-green" class="flow">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="1002px" height="1002px" viewBox="-0.5 -0.5 1002 1002" content="&lt;mxfile host=&quot;Electron&quot; modified=&quot;2020-11-16T01:02:08.641Z&quot; agent=&quot;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/13.9.5 Chrome/85.0.4183.121 Electron/10.1.5 Safari/537.36&quot; etag=&quot;4IFyZMPKQJiVT_ScwkV-&quot; version=&quot;13.9.5&quot; type=&quot;device&quot;&gt;&lt;diagram id=&quot;SO_7Pwdn0zAmYjBRLb9S&quot; name=&quot;Page-1&quot;&gt;pZTBUoMwEEC/hmMdIEI5F6s92INTrTPeIllIxsAyIRXw6w0SKAzTqY4nkre7yfIScEicNw+KlnyPDKTju6xxyJ3j+14QeObRkdYSLwx7kinBeuaewUF8gU0c6EkwqCzrkUaUWpRzmGBRQKJnjCqF9TwtRclmoKQZzNrowCGhEhZpr4JpbqnvTtJ3IDI+bB0OkZwO2RZUnDKsJ4hsHRIrRN2P8iYG2embi7m/EB07U1Do3xSwl517XO3XyZ6W0ePRfXpO31Z2lU8qT/aNbbO6HRQoPBUMukVch2xqLjQcSpp00dqcumFc59LMPDOstMIPiFGiMqTAwqRt7B6gNDQXm/dGJeY2AeagVWtS6ol1d3DLp8ZHSu1ZZ2P12YYZWCF/kEOuy7mig1ZlfytT0XQKN6mQcrDj+IQFELHbhTcTifx3Yr6V/8mzBSQIb4K+qF2QiWA/Wi/9jvAPes30fK9/YpP/A9l+Aw==&lt;/diagram&gt;&lt;/mxfile&gt;"><defs/><g><rect x="0" y="0" width="1000" height="1000" fill="#ffffff" stroke="none" pointer-events="all"/><rect x="356.5" y="356.5" width="287" height="287" fill="#d5e8d4" stroke="#82b366" pointer-events="all"/></g></svg>
+          </div>  
+          <div id="square-blue" class="flow">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="1002px" height="1002px" viewBox="-0.5 -0.5 1002 1002" content="&lt;mxfile host=&quot;Electron&quot; modified=&quot;2020-11-16T01:01:57.380Z&quot; agent=&quot;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/13.9.5 Chrome/85.0.4183.121 Electron/10.1.5 Safari/537.36&quot; etag=&quot;li5u5Vwkc8vraAp5IU7Q&quot; version=&quot;13.9.5&quot; type=&quot;device&quot;&gt;&lt;diagram id=&quot;SO_7Pwdn0zAmYjBRLb9S&quot; name=&quot;Page-1&quot;&gt;pZRBT4MwFIB/DccZoIFxHk53cAcznYm3Sh+0sfBI6QT89RYpDEKWuXii/d577evXBofEefOoaMn3yEA6vssah9w7vu8FgWc+HWkt8cKwJ5kSrGfuGRzEN9jEgZ4Eg8qyHmlEqUU5hwkWBSR6xqhSWM/TUpRsBkqawayNDhwSKmGR9iaY5pb67iR9ByLjw9bhEMnpkG1BxSnDeoLI1iGxQtT9KG9ikJ2+uZiHC9GxMwWF/ksBe925x9V+nexpGT0d3eeX9H1lV/mi8mRPbJvV7aBA4alg0C3iOmRTc6HhUNKki9bm1g3jOpdm5plhpRV+QowSlSEFFiZtY/cApaG52Lw3KjGvCTAHrVqTUk+su4NbPjU+UmrvOhurzzbMwAq5QQ65LueKDlqV/atMRdMp3KRCysGO4xNGIUqThTcTCZMIPtJ/yrMFJAjvgr6oXZCJYD9aL/2O8Aa9Znp+17+xyf+BbH8A&lt;/diagram&gt;&lt;/mxfile&gt;"><defs/><g><rect x="0" y="0" width="1000" height="1000" fill="#ffffff" stroke="none" pointer-events="all"/><rect x="356.5" y="356.5" width="287" height="287" fill="#dae8fc" stroke="#6c8ebf" pointer-events="all"/></g></svg>
+          </div>  
+        </div>  
+      </div>
+
+      <div class="landscape-narration portrait-narration" id="narration-c">
+        <div class="content-box" id="narration">
+        </div>
+      </div>
+    </div>      
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.11.0/underscore-min.js" integrity="sha512-wBiNJt1JXeA/ra9F8K2jyO4Bnxr0dRPsy7JaMqSlxqTjUGHe1Z+Fm5HMjCWqkIYvp/oCbdJEivZ5pLvAtK0csQ==" crossorigin="anonymous"></script>  
+  <script src="https://cdn.jsdelivr.net/gh/JakubNer/illustrator-web-component/resources/public/js/illustrator.js" crossorigin="anonymous"></script>
+  <script>
+    var delay = function(t) {
+      return new Promise(resolve => setTimeout(resolve.bind(null), t));
+    };
+  </script>
+  <script>
+    /** ILLUSTRATOR DEFINITION **/
+
+    /* Setup all narration animation events below: */
+    kundel.illustrator.register();
+    illustration = {
+      'narration': {
+        'target': 'illustration',
+        'min': "1em",
+        'max': "2.5em",
+        'illustration': [{
+            'flows': [{
+              'html': 'Circle shows up',
+              'seconds': 2,
+              'id': 'show-circle'
+            }],
+            'subsections': [{
+              'flows': [{
+                'html': 'Circle turns red.',
+                'seconds': 2,
+                'id': 'circle-red'
+              }, {
+                'html': 'Circle turns green,',
+                'seconds': 1,
+                'id': 'circle-green'
+              }, {
+                'html': ' then blue.',
+                'seconds': 1,
+                'id': 'circle-blue'
+              }]
+            }]
+          }, {
+            'flows': [{
+              'html': 'Square shows up',
+              'seconds': 2,
+              'id': 'show-square'
+            }],
+            'subsections': [{
+              'flows': [{
+                'html': 'Square turns red.',
+                'seconds': 2,
+                'id': 'square-red'
+              }, {
+                'html': 'Square turns green,',
+                'seconds': 1,
+                'id': 'square-green'
+              }, {
+                'html': ' then blue.',
+                'seconds': 1,
+                'id': 'square-blue'
+              }]
+            }]
+          }]
+      }
+    };
+  </script>
+  <script>
+    /** illustrator INITIALIZATION **/
+    (function() {
+      var illustrator = document.getElementById('narration');
+      var value = illustration['narration'];
+
+      illustrator.addEventListener('timeline', function(e) {
+        console.log("illustrator timeline (e.id: ", e.id, ")");
+        if (e.id == 'PREVIOUS_BEFORE_FIRST') {
+          console.log("at start");
+          return;
+        } else if (e.id == 'NEXT_AFTER_LAST') {
+          console.log("at end");
+          return;
+        }
+
+        _.each(document.getElementsByClassName('flow'), victim => {
+          victim.style.opacity = 0;
+        });
+        var target = document.getElementById(e.id);
+        if (target) {
+          target.style.visibility = 'hidden';
+          target.style.display = 'none';
+          target.style.opacity = 1;
+          _.each(target.childNodes, child => {
+            if (child.nodeType == Node.ELEMENT_NODE) {
+              child.style.webkitAnimation = 'none';
+              child.style.animation = 'none';
+            }
+          });
+        } else {
+          console.log("WARNING! element from illustrator doesn't match any DIV ID: " + e.id);
+        }
+        delay(200)
+          .then(() => {
+            _.each(document.getElementsByClassName('flow'), victim => {
+              victim.style.visibility = 'hidden';
+              victim.style.display = 'none';
+            });
+            if (target) {
+              target.style.visibility = 'visible';
+              target.style.display = 'block';
+              _.each(target.childNodes, child => {
+                if (child.nodeType == Node.ELEMENT_NODE) {
+                  child.style.webkitAnimation = '';
+                  child.style.animation = '';
+                }
+              });
+            }
+          });
+      }, true);
+
+      illustrator.setAttribute("sections", JSON.stringify(value.illustration));
+      illustrator.setAttribute("font-size-min--section", value.min);
+      illustrator.setAttribute("font-size-max--section", value.max);
+      illustrator.setAttribute("next-hint", "press spacebar or arrow keys");
+      kundel.illustrator.created(illustrator);
+      kundel.illustrator.goto_start(illustrator);
+    })();
+  </script>  
+  <script>
+    var illustrator = document.getElementById('narration');
+
+    // progress forward through content
+    var forward = function() {
+      console.log('forward');
+      kundel.illustrator.goto_next(illustrator);
+    };
+     // progress backward through content
+    var backward = function() {
+      console.log('backward');
+      kundel.illustrator.goto_previous(illustrator);
+    };
+
+    /** KEYBOARD BINDINGS **/
+    document.onkeydown = function(e) {
+        switch (e.key) {
+          case 'ArrowRight':
+            forward();
+            break;
+          case 'ArrowLeft':
+            backward();
+            break;
+          case 'ArrowUp':
+            backward();
+            break;
+          case 'ArrowDown':
+            forward();
+            break;
+          case ' ':
+            forward();
+            break;
+        }
+      }
+  </script>
+  <script>
+    /** RESCALE & CENTER ALL jj-scalable DIVs **/
+
+     // divs with .jj-scalable class can be designed using pixel offsets and absolute coordinates
+     // these will scale to their container
+
+     // these will be centered in their container
+    var rescale_scalables = function() {
+      var elements = document.getElementsByClassName("jj-scalable");
+      _.each(elements, function(element) {
+        var container = element.parentElement;
+        var scale_height = container.offsetHeight / element.offsetHeight;
+        var scale_width = container.offsetWidth / element.offsetWidth;
+        var scale = Math.min(scale_height, scale_width);
+        var translate_x = (-1 * ((element.offsetWidth - (element.offsetWidth * scale)) / 2)) / scale;
+        var translate_y = (-1 * ((element.offsetHeight - (element.offsetHeight * scale)) / 2)) / scale;
+        var inline_style = 'transform: scale(' + scale + ') translate(' + translate_x + 'px,' + translate_y + 'px);';
+        inline_style = inline_style + ' -webkit-transform: scale(' + scale + ') translate(' + translate_x + 'px,' + translate_y + 'px);';
+        inline_style = inline_style + ' -ms-transform: scale(' + scale + ') translate(' + translate_x + 'px,' + translate_y + 'px);';
+        element.setAttribute('style', inline_style);
+        element.style.position = 'absolute';
+        var top = (container.offsetHeight - (scale * element.offsetHeight)) / 2;
+        var left = (container.offsetWidth - (scale * element.offsetWidth)) / 2;
+        top = (top > 0) ? top : 0;
+        left = (left > 0) ? left : 0;
+        element.style.top = top + 'px';
+        element.style.left = left + 'px';
+      });
+    };
+    window.onload = function() {
+        rescale_scalables();
+        setTimeout(rescale_scalables, 0);
+      }
+      /** WINDOW RESIZING **/
+    window.addEventListener("resize", () => {
+      rescale_scalables();
+    });    
+  </script>  
+</body>
+
+</html>
