@@ -1,7 +1,7 @@
 {
-  "name": "@overhide/slideshow",
+  "name": "slidego",
   "version": "1.0.0",
-  "description": "Tool to bootstrap and render slide-shows.",
+  "description": "Tool generate slide-shows from SVGs, encapsulated in a single HTML file.",
   "directories": {
     "example": "example"
   },
@@ -11,18 +11,24 @@
   "main": "src/main.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/overhide/slideshow.git"
+    "url": "git+https://github.com/jakubner/slidego.git"
   },
   "keywords": [
-    "overhide",
-    "slideshow"
+    "ppt",
+    "slideshow",
+    "html",
+    "simple",
+    "slides",
+    "presentation",
+    "embed",
+    "iframe"
   ],
-  "author": "overhide",
+  "author": "Jakub Ner",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/overhide/slideshow/issues"
+    "url": "https://github.com/jakubner/slidego/issues"
   },
-  "homepage": "https://github.com/overhide/slideshow#readme",
+  "homepage": "https://github.com/jakubner/slidego#readme",
   "dependencies": {
     "ajv": "^6.12.6",
     "arg": "^4.1.3",
@@ -30,8 +36,8 @@
     "js-yaml": "^3.14.0"
   },
   "bin": {
-    "@overhide/slideshow": "bin/slideshow",
-    "slideshow": "bin/slideshow"
+    "@jakubner/slidego": "bin/slidego",
+    "slidego": "bin/slidego"
   },
   "publishConfig": {
     "access": "public"
