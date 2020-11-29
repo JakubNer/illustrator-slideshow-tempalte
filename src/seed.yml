@@ -1,5 +1,11 @@
 min: 1em
 max: 2.5em
+svgPaneBackgroundColor: "#FFFFFF"
+textPaneBackgroundColor: "#FFFFFF"
+topBorder: solid 0px
+bottomBorder: solid 0px
+leftBorder: solid 0px
+rightBorder: solid 0px
 illustration:
 - flows:
   - html: This is a <b>flow</b>.

@@ -1,5 +1,11 @@
 min: 1em
 max: 2.5em
+svgPaneBackgroundColor: "#EEFFFF"
+textPaneBackgroundColor: "#FFEEFF"
+topBorder: solid 1px
+bottomBorder: solid 1px
+leftBorder: solid 0px
+rightBorder: solid 0px
 illustration:
 - flows:
   - html: <b>Circle</b> shows up
@@ -16,6 +22,16 @@ illustration:
     - html: " then blue."
       seconds: 1
       id: circle-blue
+  - flows:
+    - html: Circle turns red again.
+      seconds: 2
+      id: circle-red-again
+    - html: Circle turns green again,
+      seconds: 1
+      id: circle-green-again
+    - html: " then blue, again."
+      seconds: 1
+      id: circle-blue-again
 - flows:
   - html: <em>Square</em> shows up
     seconds: 2

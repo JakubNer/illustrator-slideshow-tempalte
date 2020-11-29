@@ -35,9 +35,8 @@
     .slideshow-container {
       left: 0%;
       top: 0px;
-      height: calc(100% - 2em);
-      width: calc(100% - 2em);
-      margin: 1em;
+      height: 100%;
+      width: 100%;
     }
     .content-box {
       left: 0px;
@@ -45,9 +44,22 @@
       width: 1000px;
       height: 1000px;
     }
+    .border-box {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      z-index: 100;      
+    }
+    #narration.content-box {
+      height: calc(1000px - 3em);
+      width: calc(1000px - 2em);
+      padding: 1em;
+      padding-bottom: 2em
+    }
     .container-box {
       height: 1000px;
       width: 2000px;
+      z-index: 50;
     }
     .landscape-illustration {
       position: absolute;
@@ -89,23 +101,25 @@
 
   <div class="slideshow-container">
     <div class="container-box jj-scalable">
-      <div class="landscape-illustration portrait-illustration" id="illustration-c">
-        <div class="content-box" id="illustration">
+      <div class="border-box">
+        <div class="landscape-illustration portrait-illustration" id="illustration-c">
+          <div class="content-box" id="illustration">
 
 <!--%SVGS%-->
 
-        </div>  
-      </div>
-
-      <div class="landscape-narration portrait-narration" id="narration-c">
-        <div class="content-box" id="narration">
+          </div>  
         </div>
-      </div>
+
+        <div class="landscape-narration portrait-narration" id="narration-c">
+          <div class="content-box" id="narration">
+          </div>
+        </div>
+      </div>        
     </div>      
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.11.0/underscore-min.js" integrity="sha512-wBiNJt1JXeA/ra9F8K2jyO4Bnxr0dRPsy7JaMqSlxqTjUGHe1Z+Fm5HMjCWqkIYvp/oCbdJEivZ5pLvAtK0csQ==" crossorigin="anonymous"></script>  
-  <script src="https://cdn.jsdelivr.net/gh/JakubNer/illustrator-web-component/resources/public/js/illustrator.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/gh/JakubNer/narrator-web-component@latest/resources/public/js/narrator.js" crossorigin="anonymous"></script>
   <script>
     var delay = function(t) {
       return new Promise(resolve => setTimeout(resolve.bind(null), t));
@@ -115,7 +129,7 @@
     /** ILLUSTRATOR DEFINITION **/
 
     /* Setup all narration animation events below: */
-    kundel.illustrator.register();
+    kundel.narrator.register();
     illustration = {'narration': {...
       
 %NARRATION%
@@ -125,10 +139,10 @@
   <script>
     /** illustrator INITIALIZATION **/
     (function() {
-      var illustrator = document.getElementById('narration');
+      var narration = document.getElementById('narration');
       var value = illustration['narration'];
 
-      illustrator.addEventListener('timeline', function(e) {
+      narration.addEventListener('timeline', function(e) {
         console.log("illustrator timeline (e.id: ", e.id, ")");
         if (e.id == 'PREVIOUS_BEFORE_FIRST') {
           console.log("at start");
@@ -174,26 +188,46 @@
           });
       }, true);
 
-      illustrator.setAttribute("sections", JSON.stringify(value.illustration));
-      illustrator.setAttribute("font-size-min--section", value.min);
-      illustrator.setAttribute("font-size-max--section", value.max);
-      illustrator.setAttribute("next-hint", "press spacebar or arrow keys");
-      kundel.illustrator.created(illustrator);
-      kundel.illustrator.goto_start(illustrator);
+      var css = `
+        #illustration { background-color: ${value.svgPaneBackgroundColor ? value.svgPaneBackgroundColor : "#FFFFFF"}; }
+        .narrator-section .narrator-subsection-frame { background-color: ${value.textPaneBackgroundColor ? value.textPaneBackgroundColor : "#FFFFFF"} !important; }
+        .container-box { 
+          background-color: ${value.textPaneBackgroundColor ? value.textPaneBackgroundColor : "#FFFFFF"}; 
+        }
+        .border-box {
+          border-top: ${value.topBorder ? value.topBorder : "0px"}; 
+          border-bottom: ${value.bottomBorder ? value.bottomBorder : "0px"}; 
+          border-left: ${value.leftBorder ? value.leftBorder : "0px"}; 
+          border-right: ${value.rightBorder ? value.rightBorder : "0px"}; 
+        }
+      `;
+      head = document.head || document.getElementsByTagName('head')[0];
+      style = document.createElement('style');
+      head.appendChild(style);
+      style.type = 'text/css';
+      style.appendChild(document.createTextNode(css));
+
+      narration.setAttribute("sections", JSON.stringify(value.illustration));
+      narration.setAttribute("paused", "true");
+      narration.setAttribute("font-size-min--section", value.min);
+      narration.setAttribute("font-size-max--section", value.max);
+      narration.setAttribute("next-hint", "press spacebar or arrow keys");
+      kundel.narrator.created(narration);
+      kundel.narrator.goto_start(narration);
     })();
   </script>  
   <script>
-    var illustrator = document.getElementById('narration');
+    var narration = document.getElementById('narration');
 
     // progress forward through content
     var forward = function() {
       console.log('forward');
-      kundel.illustrator.goto_next(illustrator);
+      kundel.narrator.goto_next(narration);
     };
      // progress backward through content
     var backward = function() {
       console.log('backward');
-      kundel.illustrator.goto_previous(illustrator);
+      kundel.narrator.goto_previous(narration);
     };
 
     /** KEYBOARD BINDINGS **/
@@ -237,7 +271,6 @@
         inline_style = inline_style + ' -webkit-transform: scale(' + scale + ') translate(' + translate_x + 'px,' + translate_y + 'px);';
         inline_style = inline_style + ' -ms-transform: scale(' + scale + ') translate(' + translate_x + 'px,' + translate_y + 'px);';
         element.setAttribute('style', inline_style);
-        element.style.position = 'absolute';
         var top = (container.offsetHeight - (scale * element.offsetHeight)) / 2;
         var left = (container.offsetWidth - (scale * element.offsetWidth)) / 2;
         top = (top > 0) ? top : 0;
