@@ -13,7 +13,7 @@ Loading a slideshow in a browser (perhaps through an iframe), the viewer will se
 
 
 
-![intro](.\.readme\intro.PNG)
+![](.readme\intro.PNG)
 
 
 
@@ -243,7 +243,7 @@ A *subsection* is another list of *flows*:  a list of paragraphs.  These, howeve
 
 Consider the slideshow screenshot below:
 
-![intro](.\.readme\intro.PNG)
+![](.readme\intro.PNG)
 
 The "Circle turns red" text selection comes from the following definition in the YAML:
 
