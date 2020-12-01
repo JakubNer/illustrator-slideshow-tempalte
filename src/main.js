@@ -5,7 +5,7 @@ import yaml from 'js-yaml';
 import Ajv from 'ajv';
 
 const SCHEMA = {
-  required: ['min', 'max', 'illustration'],
+  required: ['min', 'max', 'sections'],
   properties: {
     min: {
       type: 'string',
@@ -15,7 +15,34 @@ const SCHEMA = {
       type: 'string',
       pattern: '^[0-9.]+(em|px)$'
     },
-    illustration: {
+    svgPaneBackgroundColor: {
+      type: 'string',
+      pattern: '#[a-fA-F0-9]+'
+    },
+    textPaneBackgroundColor: {
+      type: 'string',
+      pattern: '#[a-fA-F0-9]+'
+    },
+    topBorder: {
+      type: 'string',
+      pattern: '[a-f]+ [0-9]+px'
+    },
+    bottomBorder: {
+      type: 'string',
+      pattern: '[a-f]+ [0-9]+px'
+    },
+    rightBorder: {
+      type: 'string',
+      pattern: '[a-f]+ [0-9]+px'
+    },
+    leftBorder: {
+      type: 'string',
+      pattern: '[a-f]+ [0-9]+px'
+    },
+    flipPanes: {
+      type: 'boolean'
+    },
+    sections: {
       type: 'array',
       items: [{
         type: 'object',
@@ -35,7 +62,15 @@ const SCHEMA = {
                 },
                 id: {
                   type: 'string',
-                  pattern: '^[-a-zA-Z0-9._]+$'
+                  pattern: '^[-a-zA-Z0-9._]+:[-a-zA-Z0-9._]+$'
+                },
+                focus: {
+                  type: 'string',
+                  pattern: '^[0-9.]+,[0-9.]+,[0-9.]+,[0-9.]+(;[0-9.]+,[0-9.]+,[0-9.]+,[0-9.]+)* [0-9.]+ [0-9.]+$'
+                },
+                highlight: {
+                  type: 'string',
+                  pattern: '^[0-9.]+,[0-9.]+,[0-9.]+,[0-9.]+(;[0-9.]+,[0-9.]+,[0-9.]+,[0-9.]+)* #[a-fA-F0-9]+ [0-9.]+ [0-9.]+(;[0-9.]+)* [0-9.]+ [0-9.]+$'
                 }
               }  
             }]
@@ -60,8 +95,16 @@ const SCHEMA = {
                       },
                       id: {
                         type: 'string',
-                        pattern: '^[-a-zA-Z0-9._]+$'
-                      }
+                        pattern: '^[-a-zA-Z0-9._]+:[-a-zA-Z0-9._]+$'
+                      },
+                      focus: {
+                        type: 'string',
+                        pattern: '^[0-9.]+,[0-9.]+,[0-9.]+,[0-9.]+(;[0-9.]+,[0-9.]+,[0-9.]+,[0-9.]+)* [0-9.]+ [0-9.]+$'
+                      },
+                      highlight: {
+                        type: 'string',
+                        pattern: '^[0-9.]+,[0-9.]+,[0-9.]+,[0-9.]+(;[0-9.]+,[0-9.]+,[0-9.]+,[0-9.]+)* #[a-fA-F0-9]+ [0-9.]+ [0-9.]+(;[0-9.]+)* [0-9.]+ [0-9.]+$'
+                      }      
                     }  
                   }]
                 }
@@ -126,21 +169,41 @@ function showHelp() {
       right/bottom panel of the slideshow while the *.svg with filename
       matching the 'id' of the flow is displayed in the left/top panel.
 
-      Schema:
-
-          min: 1em                     /* minimized text font size */
-          max: 2.5em                   /* maximized/expanded font size */
-          illustration:
-          - flows:         
-            - html: ...                /* HTML text of first flow */
-              seconds: 2               /* Number of seconds to animate */
-              id: ...                  /* name of *.svg file to display */
-            subsections:
-            - flows:                  
-              - html:                  /* HTML text of first sub-flow */
-                seconds: 2             /* Number of seconds to animate */
-                id: ...                /* name of *.svg file to display */  
-
+      # Schema:
+      #
+      #     min: 1em                     /* minimized text font size */
+      #     max: 2.5em                   /* maximized/expanded font size */
+      #     svgPaneBackgroundColor: "#EEFFFF"
+      #     textPaneBackgroundColor: "#FFEEFF"
+      #     topBorder: solid 1px
+      #     bottomBorder: solid 1px
+      #     leftBorder: solid 0px
+      #     rightBorder: solid 0px
+      #     flipPanes: false
+      #     sections:                    /* array of sections, can have flows and subsections */
+      #     - flows:                     /* array of flows */
+      #       - html: "foo <em>bar</em>" /* HTML text of first flow */
+      #         seconds: 2               /* Number of seconds to animate */
+      #         id: "some:10"            /* name of *.svg file ('some') to display, and qualifier (':10') */
+      #         focus: "0,0,1000,1000;475,50,300,300;475,50,300,300;475,50,300,300;0,0,1000,1000 .75 4.25"
+      #                                  /* viewport definition + animation:
+      #                                   * - list of animation keyframes as viewport coordinates x,y,w,h
+      #                                   * - time to start viewport animation
+      #                                   * - time to end viewport animation
+      #         highlight: "115,415,300,300 #921930 2 0;.4 .5 2"
+      #                                  /* definition of highlights:
+      #                                   * - list of highlight areas: x,y,w,h
+      #                                   * - highlight color
+      #                                   * - highlight line thickness
+      #                                   * - list of opacity keyframes
+      #                                   * - time to start opacity animation
+      #                                   * - time to end opacity animation
+      #       subsections:               /* array of subsections under section (side to side gallery) */
+      #       - flows:                   /* array of flows */
+      #         - html: "blah"           /* HTML text of first sub-flow */
+      #           seconds: 2             /* Number of seconds to animate */
+      #           id: "other:10"         /* name of *.svg file ('other') to display, and qualifier (':10') */
+          
     SVG files:
 
       Each SVG file should be 1000px x 1000px.  If you use '--seed' to
@@ -166,7 +229,28 @@ function getYamlFileName(dirname) {
 
 function getYamlAsJson(dirname) {
   const file = getYamlFileName(dirname);
-  return yaml.safeLoad(fs.readFileSync(path.resolve(file), 'utf8'));
+  const contents = yaml.safeLoad(fs.readFileSync(path.resolve(file), 'utf8'));
+  return contents;
+}
+
+function fixIds(contents) {
+  contents.sections.forEach(i => {
+    if (i.flows) {
+      i.flows.forEach(f => {
+        f.id = f.id.replace(":","__");
+      });
+    }
+    if (i.subsections) {
+      i.subsections.forEach(s => {
+        if (s.flows) {
+          s.flows.forEach(f => {
+            f.id = f.id.replace(":","__");
+          });
+        }    
+      });
+    }
+  });
+  return contents;
 }
 
 function ymlFileHasGoodSyntax(dirname) {
@@ -183,16 +267,92 @@ function ymlFileHasGoodSyntax(dirname) {
   return true;
 }
 
+function addFlow(f, result, mappings) {
+  var rootId = f.id.match(/^([-a-zA-Z0-9._]+)__.*$/);
+  rootId = rootId[1];
+  if (f.id in mappings) {
+    console.log(`Flow has a repeating ID, flow IDs must be unique across all flows, culprit: ${f.id}`);
+    process.exit();
+  }
+  var mapping = {};
+  if ('focus' in f) {
+    var params = f.focus.match(/^(\S+) (\S+) (\S+)$/)
+    var coords = Array.from(`${params[1]}`.matchAll(/([0-9.]+,[0-9.]+,[0-9.]+,[0-9.]+)/g));
+    coords = coords.map(c => c[0]);
+    coords = coords.map(f => f.replace(/,/g,' '));
+    coords = coords.join(';');
+    var begin = params[2];
+    var duration = params[3] - params[2];
+    if (duration < 0) {
+      console.log(`end of animation should be after start of animation for 'focus' in ${f.id}`);
+      process.exit();
+    }
+    var focus = `<animate attributeName='viewBox' values='${coords}' begin='${begin}s' dur='${duration}s' fill='freeze' class='focus-anim'></animate>`
+    mapping['focus'] = focus;
+  }
+  if ('highlight' in f) {
+    var params = f.highlight.match(/^(\S+) (\S+) (\S+) (\S+) (\S+) (\S+)$/)
+    var coords = Array.from(params[1].matchAll(/([0-9.]+,[0-9.]+,[0-9.]+,[0-9.]+)/g));    
+    coords = coords.map(c => c[0]);
+    var color = params[2];
+    var thickness = params[3];
+    var keyframes = params[4];
+    var begin = params[5];
+    var duration = params[6] - params[5];
+    if (duration < 0) {
+      console.log(`end of animation should be after start of animation for 'highlight' in ${f.id}`);
+      process.exit();
+    }
+    var highlight = '';
+    coords.forEach(c => {
+      var values = c.match(/([0-9.]+),([0-9.]+),([0-9.]+),([0-9.]+)/);
+      highlight += `<rect  x='${values[1]}' y='${values[2]}' width='${values[3]}' height='${values[4]}' stroke='${color}' stroke-width=${thickness} rx=10 ry=10 fill-opacity=0 stroke-opacity=0>`
+      highlight += `<animate attributeName='stroke-opacity' values='${keyframes}' begin='${begin}s' dur='${duration}s' fill='freeze' class='highlight-anim'/>`
+      highlight += `</rect>`
+    });
+    mapping['highlight'] = highlight;
+  }
+  mappings[f.id] = mapping;
+  if (!result.includes(rootId)) {
+    result.push(rootId);
+  }
+}
+
 function getAllSvgFilesFromYml(dirname) {
-  const contents = getYamlAsJson(dirname);
-  if (!contents) return [];
-  if (!contents.illustration) return [];
+  const contents = fixIds(getYamlAsJson(dirname));
+  if (!contents) return [[], {}];
+  if (!contents.sections) return [[], {}];
   var result = [];
-  contents.illustration.forEach(i => {
+  var mappings = {};
+  contents.sections.forEach(i => {
     if (i.flows) {
       i.flows.forEach(f => {
-        if (f.id && f.id.length > 0) {
-          result.push(f.id);
+        addFlow(f, result, mappings);
+      });
+    }
+    if (i.subsections) {
+      i.subsections.forEach(s => {
+        if (s.flows) {
+          s.flows.forEach(f => {
+            addFlow(f, result, mappings);
+          });
+        }    
+      });
+    }
+  });
+  result = result.map(r => path.resolve(dirname + path.sep + r + '.svg'));
+  return [result, mappings];
+}
+
+function removeFocusAndHighlightFromJson(contents) {
+  contents.sections.forEach(i => {
+    if (i.flows) {
+      i.flows.forEach(f => {
+        if ("highlight" in f) {
+          delete f["highlight"];
+        }
+        if ("focus" in f) {
+          delete f["focus"];
         }
       });
     }
@@ -200,19 +360,21 @@ function getAllSvgFilesFromYml(dirname) {
       i.subsections.forEach(s => {
         if (s.flows) {
           s.flows.forEach(f => {
-            if (f.id && f.id.length > 0) {
-              result.push(f.id);
+            if ("highlight" in f) {
+              delete f["highlight"];
+            }
+            if ("focus" in f) {
+              delete f["focus"];
             }
           });
         }    
       });
     }
   });
-  return result.map(r => path.resolve(dirname + path.sep + r + '.svg'));
 }
 
 function allSvgFilesFromYmlPresentInFolder(dirname) {
-  const svgsInYml = getAllSvgFilesFromYml(dirname);
+  const svgsInYml = getAllSvgFilesFromYml(dirname)[0];
   var allThere = true;
   svgsInYml.forEach(s => {
     if (!fs.existsSync(s)) {
@@ -224,7 +386,7 @@ function allSvgFilesFromYmlPresentInFolder(dirname) {
 }
 
 function getSvgReplacementString(dirname) {
-  const svgsInYml = getAllSvgFilesFromYml(dirname);
+  const svgsInYml = getAllSvgFilesFromYml(dirname)[0];
   let result = [];
   svgsInYml.forEach(s => {
     var id = path.basename(s,path.extname(s));
@@ -242,8 +404,12 @@ function getSvgReplacementString(dirname) {
 function doWrite(dirname) {
   var template = fs.readFileSync(path.resolve(__dirname, 'template.html'), 'utf8');
   var svgs = getSvgReplacementString(dirname);
-  var narration = getYamlAsJson(dirname);
-  var output = template.replace("<!--%SVGS%-->",svgs).replace("%NARRATION%",JSON.stringify(narration,null,2));
+  var mappings = getAllSvgFilesFromYml(dirname)[1];
+  var narration = fixIds(getYamlAsJson(dirname));
+  removeFocusAndHighlightFromJson(narration);
+  var output = template.replace("<!--%SVGS%-->",svgs)
+    .replace("%NARRATION%",JSON.stringify(narration,null,2))
+    .replace("%MAPPINGS%",JSON.stringify(mappings,null,2));
   var outputName = getYamlFileName(dirname);
   outputName = path.basename(outputName,path.extname(outputName));
   outputName += ".html";

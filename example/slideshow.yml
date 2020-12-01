@@ -1,4 +1,39 @@
-min: 1em
+# Schema:
+#
+#     min: 1em                     /* minimized text font size */
+#     max: 2.5em                   /* maximized/expanded font size */
+#     svgPaneBackgroundColor: "#EEFFFF"
+#     textPaneBackgroundColor: "#FFEEFF"
+#     topBorder: solid 1px
+#     bottomBorder: solid 1px
+#     leftBorder: solid 0px
+#     rightBorder: solid 0px
+#     flipPanes: false
+#     sections:                    /* array of sections, can have flows and subsections */
+#     - flows:                     /* array of flows */
+#       - html: "foo <em>bar</em>" /* HTML text of first flow */
+#         seconds: 2               /* Number of seconds to animate */
+#         id: "some:10"            /* name of *.svg file ('some') to display, and qualifier (':10') */
+#         focus: "0,0,1000,1000;475,50,300,300;475,50,300,300;475,50,300,300;0,0,1000,1000 .75 4.25"
+#                                  /* viewport definition + animation:
+#                                   * - list of animation keyframes as viewport coordinates x,y,w,h
+#                                   * - time to start viewport animation
+#                                   * - time to end viewport animation
+#         highlight: "115,415,300,300 #921930 2 0,.4 .5 2"
+#                                  /* definition of highlights:
+#                                   * - list of highlight areas: x,y,w,h
+#                                   * - highlight color
+#                                   * - highlight line thickness
+#                                   * - list of opacity keyframes
+#                                   * - time to start opacity animation
+#                                   * - time to end opacity animation
+#       subsections:               /* array of subsections under section (side to side gallery) */
+#       - flows:                   /* array of flows */
+#         - html: "blah"           /* HTML text of first sub-flow */
+#           seconds: 2             /* Number of seconds to animate */
+#           id: "other:10"         /* name of *.svg file ('other') to display, and qualifier (':10') */
+    
+min: 2em
 max: 2.5em
 svgPaneBackgroundColor: "#EEFFFF"
 textPaneBackgroundColor: "#FFEEFF"
@@ -7,44 +42,39 @@ bottomBorder: solid 1px
 leftBorder: solid 0px
 rightBorder: solid 0px
 flipPanes: false
-illustration:
+sections:
 - flows:
-  - html: <b>Circle</b> shows up
+  - html: "<b>Circles</b> show up (show all circles) "
     seconds: 2
-    id: show-circle
+    id: "first-flow:10"
+- flows:
+  - html: "Focus on red circle, then unfocus "
+    seconds: 5
+    id: "first-flow:20"
+    focus: "0,0,1000,1000;475,50,320,320;475,50,320,320;475,50,320,320;0,0,1000,1000 .75 4.25"
   subsections:
   - flows:
-    - html: Circle turns red.
+    - html: "Highlight blue circle "
       seconds: 2
-      id: circle-red
-    - html: Circle turns green,
-      seconds: 1
-      id: circle-green
-    - html: " then blue."
-      seconds: 1
-      id: circle-blue
+      id: "first-flow:20-10"
+      highlight: "115,415,310,300 #921930 2 .4 .5 2"
+    - html: "Also highlight green "
+      seconds: 2
+      id: "first-flow:20-20"
+      highlight: "115,415,300,300;480,415,300,300 #921930 2 .4 0 2"
+    - html: "Zoom in on the highlights, then they disappear "
+      seconds: 3
+      id: "first-flow:20-30"
+      focus: "0,0,1000,1000;115,411,678,329 0 1"
+      highlight: "115,415,300,300;480,415,300,300 #921930 2 .4;.4;0 0 2"
   - flows:
-    - html: Circle turns red again.
+    - html: "Done, reset "
       seconds: 2
-      id: circle-red-again
-    - html: Circle turns green again,
-      seconds: 1
-      id: circle-green-again
-    - html: " then blue, again."
-      seconds: 1
-      id: circle-blue-again
+      id: "first-flow:20-40"
+      focus: "115,411,678,329;115,411,678,329;115,411,678,329;0,0,1000,1000 0 2"
 - flows:
-  - html: <em>Square</em> shows up
+  - html: "transition to squares "
     seconds: 2
-    id: show-square
-  subsections:
-  - flows:
-    - html: <a href="www.google.com" target="_blank">Square turns red</a>.
-      seconds: 2
-      id: square-red
-    - html: Square turns green,
-      seconds: 1
-      id: square-green
-    - html: " then blue."
-      seconds: 1
-      id: square-blue
+    id: "second-flow:10"
+    focus: "500,500,0,0;0,0,1000,1000 0 1.25"
+

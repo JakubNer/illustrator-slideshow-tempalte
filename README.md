@@ -114,46 +114,50 @@ To effectively use this tool, you must be comfortable editing [YAML](https://en.
 To see the example slideshow definition open `./example/slideshow.yml` file in a text editor.  It's repeated below for convenience:
 
 ```
-min: 1em
+min: 2em
 max: 2.5em
 svgPaneBackgroundColor: "#EEFFFF"
 textPaneBackgroundColor: "#FFEEFF"
-topBorder: solid 3px
-bottomBorder: solid 3px
+topBorder: solid 1px
+bottomBorder: solid 1px
 leftBorder: solid 0px
 rightBorder: solid 0px
 flipPanes: false
-illustration:
+sections:
 - flows:
-  - html: <b>Circle</b> shows up
+  - html: "<b>Circles</b> show up (show all circles) "
     seconds: 2
-    id: show-circle
+    id: "first-flow:10"
+- flows:
+  - html: "Focus on red circle, then unfocus "
+    seconds: 5
+    id: "first-flow:20"
+    focus: "0,0,1000,1000;475,50,320,320;475,50,320,320;475,50,320,320;0,0,1000,1000 .75 4.25"
   subsections:
   - flows:
-    - html: Circle turns red.
+    - html: "Highlight blue circle "
       seconds: 2
-      id: circle-red
-    - html: Circle turns green,
-      seconds: 1
-      id: circle-green
-    - html: " then blue."
-      seconds: 1
-      id: circle-blue
-- flows:
-  - html: <em>Square</em> shows up
-    seconds: 2
-    id: show-square
-  subsections:
+      id: "first-flow:20-10"
+      highlight: "115,415,310,300 #921930 2 .4 .5 2"
+    - html: "Also highlight green "
+      seconds: 2
+      id: "first-flow:20-20"
+      highlight: "115,415,300,300;480,415,300,300 #921930 2 .4 0 2"
+    - html: "Zoom in on the highlights, then they disappear "
+      seconds: 3
+      id: "first-flow:20-30"
+      focus: "0,0,1000,1000;115,411,678,329 0 1"
+      highlight: "115,415,300,300;480,415,300,300 #921930 2 .4;.4;0 0 2"
   - flows:
-    - html: <a href="www.google.com" target="_blank">Square turns red</a>.
+    - html: "Done, reset "
       seconds: 2
-      id: square-red
-    - html: Square turns green,
-      seconds: 1
-      id: square-green
-    - html: " then blue."
-      seconds: 1
-      id: square-blue
+      id: "first-flow:20-40"
+      focus: "115,411,678,329;115,411,678,329;115,411,678,329;0,0,1000,1000 0 2"
+- flows:
+  - html: "transition to squares "
+    seconds: 2
+    id: "second-flow:10"
+    focus: "500,500,0,0;0,0,1000,1000 0 1.25"
 ```
 
 This YAML file controls everything about the slide show.  The other files in the `./example` folder are the SVG files that are rendered in the slideshow when the appropriate *flow* is selected.
@@ -173,9 +177,7 @@ svgPaneBackgroundColor: "#EEFFFF"
 textPaneBackgroundColor: "#FFEEFF"
 ```
 
-These specify the background color of the text and SVG panes.  
-
-They're in CSS notation.
+These specify the background color of the text and SVG panes as an RGB `#` value.  
 
 These are optional, defaults to white.
 
@@ -189,8 +191,6 @@ rightBorder: solid 0px
 ```
 
 These specify the border around the slideshow, if any (set to `0px` for none).
-
-These are in CSS notation.
 
 These are optional, defaults to none.
 
@@ -227,17 +227,73 @@ The text is defined in the `html` attribute of a *text selection*.
 
 ##### `id` SVG reference
 
+(I'm partial to using https://draw.io to author SVG files)
+
 The currently displayed SVG file is dictated by the `id` corresponding to the *text selection*. 
 
-> **NOTE**: you cannot reuse `id`s to display the same image--must duplicate the image.  Re-using `id`s will cause *text selection* to break.
->
-> You can see this in the example, where `circle-red` is duplicated into `circle-red-again`.
+Each `id` is a colon (':') delimited string.  The part before the colon (':') is the file name (without extension) of the SVG file to use.  The part after the colon (':') is a unique qualifier for this ID.  
+
+> **NOTE**: you can reuse SVG files for multipl `id`s--to display the same image--but you must uniquely qualify them (second part).
 
 ##### `seconds` Playback Timing
 
 The *seconds* attribute dictates the number of seconds to stay on that slide/*test selection* during playback. 
 
 If set to '0', that slide/*text selection* will be skipped during playback, but it will be navigateable through trick play.
+
+##### `highlight` Highlighting
+
+You might want to underscore a section of the SVG with a highlighting rectangle or multiple rectangles.  You might want to animate these rectangles coming into view.  
+
+To do so use the optional `highlight` property of flows.  The format of the `highlight` property is as follows: 
+
+```
+highlight ::= "coords color thickness keyframes start end"
+```
+
+Where: 
+
+  - `coords` are a semi-colon (";") delimited list of highlight rectangle coordiante tuples: `x, y, width, height`.
+  - `color` is the RGB color of the highlight
+  - `thickness` is the rectangle outline thickness in pixels
+  - `keyframes` are the semi-colon (";") delimited opacity values between 0 and 1, which constitute opacity keyframes for appearance/disappearance animation.
+  - `start` is the start of the `keyframes`
+  - `end` is the end of the `keyframes`
+
+For example in:
+
+```
+      highlight: "115,415,300,300;480,415,300,300 #921930 2 .4;0;.6 0 2"
+```
+
+  - will draw two highlights, one at (115,415) that's 300x300, another at (480,415) that's also 300x300
+  - both highlights will have the `#921930` colored outline of 2 pixel thickness
+  - the highlights will start at 0s with opacity 0.4, then disappear with opacity 0, then reappear stronger with opacity 0.6, at 2 seconds.
+
+##### `focus` Focusing
+
+You might want to pan and zoom into a section of the SVG.  Do so with the optional `focus` property of a flow. 
+
+The format of the `focus` property is as follows:
+
+```
+focus: "keyframes start end"
+```
+
+Where:
+
+  - `keyframes` are semi-colon (";") delimited list of focus rectangles to use as keyframes for the view-port, these are coordiante tuples: `x, y, width, height`.
+  - `start` is the start of the `keyframes`
+  - `end` is the end of the `keyframes`
+
+For example in:
+
+```
+      focus: "0,0,1000,1000;115,411,678,329 0 1"
+```
+
+  - will start with a keyframe at 0 seconds showing the whole SVG, starting a (0,0) with the whole size of 1000x1000
+  - by the second keyframe at 1 second, the focus will be on a rectangle that's 678x329 with the top-left corner at (115,411)
 
 ##### Flows
 
@@ -253,45 +309,4 @@ Each individual *flow* (paragraph) can have an optional *subsection* below it.
 
 A *subsection* is another list of *flows*:  a list of paragraphs.  These, however, are not all shown on the screen.  These *subsections* only come into view when the current parent *flow* is active.  The *flows* within a subsection are rendered as a gallery (side to side, coming into view).
 
-## Quick Reference
 
-Consider the slideshow screenshot below:
-
-![](.readme/intro.PNG)
-
-The "Circle turns red" text selection comes from the following definition in the YAML:
-
-```
-    - html: Circle turns red.
-      seconds: 2
-      id: circle-red
-```
-
-The red circle image comes from the `circle-red.svg` file, as dictated by the `id` tag (notice no extension).
-
-The "Circle turns green," and "then blue." are subsequent text selections in that flow:
-
-```
-    - html: Circle turns green,
-      seconds: 1
-      id: circle-green
-    - html: " then blue."
-      seconds: 1
-      id: circle-blue
-```
-
-All of the above are in a subsection of the "Circle shows up" flow:
-
-```
-...
-illustration:
-- flows:
-  - html: <b>Circle</b> shows up
-    seconds: 2
-    id: show-circle
-  subsections:
-  - flows:
-  	...
-```
-
-"Square shows up" is a subsequent flow, not currently selected, hence it's rendered in the `min` font.

@@ -1,3 +1,38 @@
+# Schema:
+#
+#     min: 1em                     /* minimized text font size */
+#     max: 2.5em                   /* maximized/expanded font size */
+#     svgPaneBackgroundColor: "#EEFFFF"
+#     textPaneBackgroundColor: "#FFEEFF"
+#     topBorder: solid 1px
+#     bottomBorder: solid 1px
+#     leftBorder: solid 0px
+#     rightBorder: solid 0px
+#     flipPanes: false
+#     sections:                    /* array of sections, can have flows and subsections */
+#     - flows:                     /* array of flows */
+#       - html: "foo <em>bar</em>" /* HTML text of first flow */
+#         seconds: 2               /* Number of seconds to animate */
+#         id: "some:10"            /* name of *.svg file ('some') to display, and qualifier (':10') */
+#         focus: "0,0,1000,1000;475,50,300,300;475,50,300,300;475,50,300,300;0,0,1000,1000 .75 4.25"
+#                                  /* viewport definition + animation:
+#                                   * - list of animation keyframes as viewport coordinates x,y,w,h
+#                                   * - time to start viewport animation
+#                                   * - time to end viewport animation
+#         highlight: "115,415,300,300 #921930 2 0;.4 .5 2"
+#                                  /* definition of highlights:
+#                                   * - list of highlight areas: x,y,w,h
+#                                   * - highlight color
+#                                   * - highlight line thickness
+#                                   * - list of opacity keyframes
+#                                   * - time to start opacity animation
+#                                   * - time to end opacity animation
+#       subsections:               /* array of subsections under section (side to side gallery) */
+#       - flows:                   /* array of flows */
+#         - html: "blah"           /* HTML text of first sub-flow */
+#           seconds: 2             /* Number of seconds to animate */
+#           id: "other:10"         /* name of *.svg file ('other') to display, and qualifier (':10') */
+    
 min: 1em
 max: 2.5em
 svgPaneBackgroundColor: "#FFFFFF"
@@ -7,13 +42,13 @@ bottomBorder: solid 0px
 leftBorder: solid 0px
 rightBorder: solid 0px
 flipPanes: false
-illustration:
+sections:
 - flows:
   - html: This is a <b>flow</b>.
     seconds: 2
-    id: first-svg
+    id: first-svg:10
   subsections:
   - flows:
     - html: This is a <em>subsection flow</em>
       seconds: 2
-      id: second-svg
+      id: second-svg:10

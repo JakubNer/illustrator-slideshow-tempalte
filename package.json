@@ -1,12 +1,12 @@
 {
   "name": "slidego",
-  "version": "1.0.4",
+  "version": "2.0.0",
   "description": "Tool generate slide-shows from SVGs, encapsulated in a single HTML file.",
   "directories": {
     "example": "example"
   },
   "engines": {
-    "node": ">=10.13.0"
+    "node": ">=12.0.0"
   },
   "main": "src/main.js",
   "repository": {
