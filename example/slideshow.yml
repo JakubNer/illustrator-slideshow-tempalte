@@ -6,6 +6,7 @@ topBorder: solid 1px
 bottomBorder: solid 1px
 leftBorder: solid 0px
 rightBorder: solid 0px
+flipPanes: false
 illustration:
 - flows:
   - html: <b>Circle</b> shows up

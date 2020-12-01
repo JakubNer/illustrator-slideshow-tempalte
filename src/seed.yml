@@ -6,6 +6,7 @@ topBorder: solid 0px
 bottomBorder: solid 0px
 leftBorder: solid 0px
 rightBorder: solid 0px
+flipPanes: false
 illustration:
 - flows:
   - html: This is a <b>flow</b>.

@@ -122,6 +122,7 @@ topBorder: solid 3px
 bottomBorder: solid 3px
 leftBorder: solid 0px
 rightBorder: solid 0px
+flipPanes: false
 illustration:
 - flows:
   - html: <b>Circle</b> shows up
@@ -192,6 +193,19 @@ These specify the border around the slideshow, if any (set to `0px` for none).
 These are in CSS notation.
 
 These are optional, defaults to none.
+
+##### Flip Panes (landscape)
+
+```
+flipPanes: false
+```
+
+In landscape mode:
+
+- when this value is `false` the illustration is on the left and narration text on the right.  
+- when this value is `true` the illustration is on the right and narration text on the left.  
+
+This property has no effect in portrait mode.
 
 ##### `html` Text Selections
 

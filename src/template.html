@@ -75,6 +75,20 @@
       left: calc(51%);
       top: 0px;
     }
+    .landscape-illustration-reverse {
+      position: absolute;
+      width: calc(49%);
+      height: 100%;
+      left: calc(51%);
+      top: 0px;
+    }
+    .landscape-narration-reverse {
+      position: absolute;
+      width: calc(49%);
+      height: 100%;
+      left: 0px;
+      top: 0px;
+    }    
 
     @media (orientation: portrait) {
       .container-box {
@@ -139,10 +153,10 @@
   <script>
     /** illustrator INITIALIZATION **/
     (function() {
-      var narration = document.getElementById('narration');
       var value = illustration['narration'];
+      var narrationPane = document.getElementById('narration');
 
-      narration.addEventListener('timeline', function(e) {
+      narrationPane.addEventListener('timeline', function(e) {
         console.log("illustrator timeline (e.id: ", e.id, ")");
         if (e.id == 'PREVIOUS_BEFORE_FIRST') {
           console.log("at start");
@@ -188,6 +202,14 @@
           });
       }, true);
 
+      if (value.flipPanes && window.innerWidth > window.innerHeight) {
+        var illustrationContainer = document.getElementById('illustration-c');
+        var narrationContainer = document.getElementById('narration-c');
+        illustrationContainer.classList.remove("landscape-illustration");
+        illustrationContainer.classList.add("landscape-illustration-reverse");
+        narrationContainer.classList.remove("landscape-narration");
+        narrationContainer.classList.add("landscape-narration-reverse");
+      }
       var css = `
         #illustration { background-color: ${value.svgPaneBackgroundColor ? value.svgPaneBackgroundColor : "#FFFFFF"}; }
         .narrator-section .narrator-subsection-frame { background-color: ${value.textPaneBackgroundColor ? value.textPaneBackgroundColor : "#FFFFFF"} !important; }
@@ -207,27 +229,27 @@
       style.type = 'text/css';
       style.appendChild(document.createTextNode(css));
 
-      narration.setAttribute("sections", JSON.stringify(value.illustration));
-      narration.setAttribute("paused", "true");
-      narration.setAttribute("font-size-min--section", value.min);
-      narration.setAttribute("font-size-max--section", value.max);
-      narration.setAttribute("next-hint", "press spacebar or arrow keys");
-      kundel.narrator.created(narration);
-      kundel.narrator.goto_start(narration);
+      narrationPane.setAttribute("sections", JSON.stringify(value.illustration));
+      narrationPane.setAttribute("paused", "true");
+      narrationPane.setAttribute("font-size-min--section", value.min);
+      narrationPane.setAttribute("font-size-max--section", value.max);
+      narrationPane.setAttribute("next-hint", "press spacebar or arrow keys");
+      kundel.narrator.created(narrationPane);
+      kundel.narrator.goto_start(narrationPane);
     })();
   </script>  
   <script>
-    var narration = document.getElementById('narration');
+    var narrationPane = document.getElementById('narration');
 
     // progress forward through content
     var forward = function() {
       console.log('forward');
-      kundel.narrator.goto_next(narration);
+      kundel.narrator.goto_next(narrationPane);
     };
      // progress backward through content
     var backward = function() {
       console.log('backward');
-      kundel.narrator.goto_previous(narration);
+      kundel.narrator.goto_previous(narrationPane);
     };
 
     /** KEYBOARD BINDINGS **/
