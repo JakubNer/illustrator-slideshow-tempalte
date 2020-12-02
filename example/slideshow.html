@@ -142,7 +142,7 @@
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.11.0/underscore-min.js" integrity="sha512-wBiNJt1JXeA/ra9F8K2jyO4Bnxr0dRPsy7JaMqSlxqTjUGHe1Z+Fm5HMjCWqkIYvp/oCbdJEivZ5pLvAtK0csQ==" crossorigin="anonymous"></script>  
-  <script src="https://cdn.jsdelivr.net/gh/JakubNer/narrator-web-component/resources/public/js/narrator.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/gh/JakubNer/narrator-web-component@1.0.1/resources/public/js/narrator.js" crossorigin="anonymous"></script>
   <script>
     var delay = function(t) {
       return new Promise(resolve => setTimeout(resolve.bind(null), t));
@@ -171,7 +171,7 @@
         {
           "html": "<b>Circles</b> show up (show all circles) ",
           "seconds": 2,
-          "id": "first-flow__10"
+          "id": "first-flow__1"
         }
       ]
     },
@@ -180,7 +180,7 @@
         {
           "html": "Focus on red circle, then unfocus ",
           "seconds": 5,
-          "id": "first-flow__20"
+          "id": "first-flow__2"
         }
       ],
       "subsections": [
@@ -189,17 +189,17 @@
             {
               "html": "Highlight blue circle ",
               "seconds": 2,
-              "id": "first-flow__20-10"
+              "id": "first-flow__3"
             },
             {
               "html": "Also highlight green ",
               "seconds": 2,
-              "id": "first-flow__20-20"
+              "id": "first-flow__4"
             },
             {
               "html": "Zoom in on the highlights, then they disappear ",
               "seconds": 3,
-              "id": "first-flow__20-30"
+              "id": "first-flow__5"
             }
           ]
         },
@@ -208,7 +208,7 @@
             {
               "html": "Done, reset ",
               "seconds": 2,
-              "id": "first-flow__20-40"
+              "id": "first-flow__6"
             }
           ]
         }
@@ -219,7 +219,7 @@
         {
           "html": "transition to squares ",
           "seconds": 2,
-          "id": "second-flow__10"
+          "id": "second-flow__7"
         }
       ]
     }
@@ -231,24 +231,24 @@
   <script>
     var annotateImageInDom = function(id) {
       var mappings = {
-  "first-flow__10": {},
-  "first-flow__20": {
+  "first-flow__1": {},
+  "first-flow__2": {
     "focus": "<animate attributeName='viewBox' values='0 0 1000 1000;475 50 320 320;475 50 320 320;475 50 320 320;0 0 1000 1000' begin='.75s' dur='3.5s' fill='freeze' class='focus-anim'></animate>"
   },
-  "first-flow__20-10": {
+  "first-flow__3": {
     "highlight": "<rect  x='115' y='415' width='310' height='300' stroke='#921930' stroke-width=2 rx=10 ry=10 fill-opacity=0 stroke-opacity=0><animate attributeName='stroke-opacity' values='.4' begin='.5s' dur='1.5s' fill='freeze' class='highlight-anim'/></rect>"
   },
-  "first-flow__20-20": {
+  "first-flow__4": {
     "highlight": "<rect  x='115' y='415' width='300' height='300' stroke='#921930' stroke-width=2 rx=10 ry=10 fill-opacity=0 stroke-opacity=0><animate attributeName='stroke-opacity' values='.4' begin='0s' dur='2s' fill='freeze' class='highlight-anim'/></rect><rect  x='480' y='415' width='300' height='300' stroke='#921930' stroke-width=2 rx=10 ry=10 fill-opacity=0 stroke-opacity=0><animate attributeName='stroke-opacity' values='.4' begin='0s' dur='2s' fill='freeze' class='highlight-anim'/></rect>"
   },
-  "first-flow__20-30": {
+  "first-flow__5": {
     "focus": "<animate attributeName='viewBox' values='0 0 1000 1000;115 411 678 329' begin='0s' dur='1s' fill='freeze' class='focus-anim'></animate>",
     "highlight": "<rect  x='115' y='415' width='300' height='300' stroke='#921930' stroke-width=2 rx=10 ry=10 fill-opacity=0 stroke-opacity=0><animate attributeName='stroke-opacity' values='.4;.4;0' begin='0s' dur='2s' fill='freeze' class='highlight-anim'/></rect><rect  x='480' y='415' width='300' height='300' stroke='#921930' stroke-width=2 rx=10 ry=10 fill-opacity=0 stroke-opacity=0><animate attributeName='stroke-opacity' values='.4;.4;0' begin='0s' dur='2s' fill='freeze' class='highlight-anim'/></rect>"
   },
-  "first-flow__20-40": {
+  "first-flow__6": {
     "focus": "<animate attributeName='viewBox' values='115 411 678 329;115 411 678 329;115 411 678 329;0 0 1000 1000' begin='0s' dur='2s' fill='freeze' class='focus-anim'></animate>"
   },
-  "second-flow__10": {
+  "second-flow__7": {
     "focus": "<animate attributeName='viewBox' values='500 500 0 0;0 0 1000 1000' begin='0s' dur='1.25s' fill='freeze' class='focus-anim'></animate>"
   }
 };
@@ -312,8 +312,6 @@
         } else {
           console.log("WARNING! element from illustrator doesn't match any DIV ID: " + e.id);
         }
-//        delay(200)
-//          .then(() => {
             _.each(document.getElementsByClassName('flow'), victim => {
               victim.style.visibility = 'hidden';
               victim.style.display = 'none';
@@ -329,7 +327,6 @@
               });
             }
           });
-//      }, true);
 
       if (value.flipPanes && window.innerWidth > window.innerHeight) {
         var illustrationContainer = document.getElementById('illustration-c');

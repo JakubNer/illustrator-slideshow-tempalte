@@ -13,7 +13,7 @@
 #     - flows:                     /* array of flows */
 #       - html: "foo <em>bar</em>" /* HTML text of first flow */
 #         seconds: 2               /* Number of seconds to animate */
-#         id: "some:10"            /* name of *.svg file ('some') to display, and qualifier (':10') */
+#         id: "some"            /* name of *.svg file ('some') to display */
 #         focus: "0,0,1000,1000;475,50,300,300;475,50,300,300;475,50,300,300;0,0,1000,1000 .75 4.25"
 #                                  /* viewport definition + animation:
 #                                   * - list of animation keyframes as viewport coordinates x,y,w,h
@@ -31,7 +31,7 @@
 #       - flows:                   /* array of flows */
 #         - html: "blah"           /* HTML text of first sub-flow */
 #           seconds: 2             /* Number of seconds to animate */
-#           id: "other:10"         /* name of *.svg file ('other') to display, and qualifier (':10') */
+#           id: "other"         /* name of *.svg file ('other') to display */
     
 min: 1em
 max: 2.5em
@@ -46,9 +46,9 @@ sections:
 - flows:
   - html: This is a <b>flow</b>.
     seconds: 2
-    id: first-svg:10
+    id: first-svg
   subsections:
   - flows:
     - html: This is a <em>subsection flow</em>
       seconds: 2
-      id: second-svg:10
+      id: second-svg

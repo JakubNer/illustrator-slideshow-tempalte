@@ -9,11 +9,11 @@ const SCHEMA = {
   properties: {
     min: {
       type: 'string',
-      pattern: '^[0-9.]+(em|px)$'
+      pattern: '^[0-9.]+(em|px|vmax)$'
     },
     max: {
       type: 'string',
-      pattern: '^[0-9.]+(em|px)$'
+      pattern: '^[0-9.]+(em|px|vmax)$'
     },
     svgPaneBackgroundColor: {
       type: 'string',
@@ -62,7 +62,7 @@ const SCHEMA = {
                 },
                 id: {
                   type: 'string',
-                  pattern: '^[-a-zA-Z0-9._]+:[-a-zA-Z0-9._]+$'
+                  pattern: '^[-a-zA-Z0-9._]+$'
                 },
                 focus: {
                   type: 'string',
@@ -95,7 +95,7 @@ const SCHEMA = {
                       },
                       id: {
                         type: 'string',
-                        pattern: '^[-a-zA-Z0-9._]+:[-a-zA-Z0-9._]+$'
+                        pattern: '^[-a-zA-Z0-9._]+$'
                       },
                       focus: {
                         type: 'string',
@@ -171,8 +171,8 @@ function showHelp() {
 
       # Schema:
       #
-      #     min: 1em                     /* minimized text font size */
-      #     max: 2.5em                   /* maximized/expanded font size */
+      #     min: 1em                     /* minimized text font size (in em, px, vmax) */
+      #     max: 2.5em                   /* maximized/expanded font size (in em, px, vmax) */
       #     svgPaneBackgroundColor: "#EEFFFF"
       #     textPaneBackgroundColor: "#FFEEFF"
       #     topBorder: solid 1px
@@ -184,7 +184,7 @@ function showHelp() {
       #     - flows:                     /* array of flows */
       #       - html: "foo <em>bar</em>" /* HTML text of first flow */
       #         seconds: 2               /* Number of seconds to animate */
-      #         id: "some:10"            /* name of *.svg file ('some') to display, and qualifier (':10') */
+      #         id: "some"               /* name of *.svg file ('some') to display */
       #         focus: "0,0,1000,1000;475,50,300,300;475,50,300,300;475,50,300,300;0,0,1000,1000 .75 4.25"
       #                                  /* viewport definition + animation:
       #                                   * - list of animation keyframes as viewport coordinates x,y,w,h
@@ -202,7 +202,7 @@ function showHelp() {
       #       - flows:                   /* array of flows */
       #         - html: "blah"           /* HTML text of first sub-flow */
       #           seconds: 2             /* Number of seconds to animate */
-      #           id: "other:10"         /* name of *.svg file ('other') to display, and qualifier (':10') */
+      #           id: "other"            /* name of *.svg file ('other') to display */
           
     SVG files:
 
@@ -234,17 +234,18 @@ function getYamlAsJson(dirname) {
 }
 
 function fixIds(contents) {
+  var qualifier = 1;
   contents.sections.forEach(i => {
     if (i.flows) {
       i.flows.forEach(f => {
-        f.id = f.id.replace(":","__");
+        f.id = f.id + `__${qualifier++}`;
       });
     }
     if (i.subsections) {
       i.subsections.forEach(s => {
         if (s.flows) {
           s.flows.forEach(f => {
-            f.id = f.id.replace(":","__");
+            f.id = f.id + `__${qualifier++}`;
           });
         }    
       });

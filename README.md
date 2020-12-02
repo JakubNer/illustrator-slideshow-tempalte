@@ -127,36 +127,36 @@ sections:
 - flows:
   - html: "<b>Circles</b> show up (show all circles) "
     seconds: 2
-    id: "first-flow:10"
+    id: "first-flow"
 - flows:
   - html: "Focus on red circle, then unfocus "
     seconds: 5
-    id: "first-flow:20"
+    id: "first-flow"
     focus: "0,0,1000,1000;475,50,320,320;475,50,320,320;475,50,320,320;0,0,1000,1000 .75 4.25"
   subsections:
   - flows:
     - html: "Highlight blue circle "
       seconds: 2
-      id: "first-flow:20-10"
+      id: "first-flow"
       highlight: "115,415,310,300 #921930 2 .4 .5 2"
     - html: "Also highlight green "
       seconds: 2
-      id: "first-flow:20-20"
+      id: "first-flow"
       highlight: "115,415,300,300;480,415,300,300 #921930 2 .4 0 2"
     - html: "Zoom in on the highlights, then they disappear "
       seconds: 3
-      id: "first-flow:20-30"
+      id: "first-flow"
       focus: "0,0,1000,1000;115,411,678,329 0 1"
       highlight: "115,415,300,300;480,415,300,300 #921930 2 .4;.4;0 0 2"
   - flows:
     - html: "Done, reset "
       seconds: 2
-      id: "first-flow:20-40"
+      id: "first-flow"
       focus: "115,411,678,329;115,411,678,329;115,411,678,329;0,0,1000,1000 0 2"
 - flows:
   - html: "transition to squares "
     seconds: 2
-    id: "second-flow:10"
+    id: "second-flow"
     focus: "500,500,0,0;0,0,1000,1000 0 1.25"
 ```
 
@@ -168,7 +168,7 @@ The `min` attribute controls the font size for text that's not selected (not cur
 
 The `max` attribute controls the font size for selected text (current focus of the slideshow). 
 
-Font sizes are specified in CSS units: `em`, `px`, etc..
+Font sizes are specified in CSS units: `em`, `px`, `vmax`.
 
 ##### Pane Background Colors
 
@@ -231,9 +231,9 @@ The text is defined in the `html` attribute of a *text selection*.
 
 The currently displayed SVG file is dictated by the `id` corresponding to the *text selection*. 
 
-Each `id` is a colon (':') delimited string.  The part before the colon (':') is the file name (without extension) of the SVG file to use.  The part after the colon (':') is a unique qualifier for this ID.  
+Each `id` is the file name (without extension) of the SVG file to use.
 
-> **NOTE**: you can reuse SVG files for multipl `id`s--to display the same image--but you must uniquely qualify them (second part).
+> **NOTE**: you can reuse any SVG file with duplciate `id`s.
 
 ##### `seconds` Playback Timing
 
