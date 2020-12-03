@@ -293,6 +293,10 @@ function addFlow(f, result, mappings) {
   }
   if ('highlight' in f) {
     var params = f.highlight.match(/^(\S+) (\S+) (\S+) (\S+) (\S+) (\S+)$/)
+    if (!params || params.length == 0) {
+      console.log(`Flow ${f.id} has an improperly formatted highlight`);
+      process.exit();
+    }
     var coords = Array.from(params[1].matchAll(/([0-9.]+,[0-9.]+,[0-9.]+,[0-9.]+)/g));    
     coords = coords.map(c => c[0]);
     var color = params[2];
