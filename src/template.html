@@ -330,13 +330,25 @@
         element.style.left = left + 'px';
       });
     };
+
+    var recenter_spans = function() {
+      var elements = document.getElementsByClassName("slidego-centered");
+      _.each(elements, function(element) {
+        if (element.offsetParent.offsetWidth > element.offsetWidth) {
+          element.style.marginLeft = `${(element.offsetParent.offsetWidth - element.offsetWidth) / 2}px`;
+        }
+      })
+    }
+
     window.onload = function() {
         rescale_scalables();
+        recenter_spans();
         setTimeout(rescale_scalables, 0);
       }
       /** WINDOW RESIZING **/
     window.addEventListener("resize", () => {
       rescale_scalables();
+      recenter_spans();
     });    
   </script>  
 </body>

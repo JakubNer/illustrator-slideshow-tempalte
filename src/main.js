@@ -64,6 +64,9 @@ const SCHEMA = {
                   type: 'string',
                   pattern: '^[-a-zA-Z0-9._]+$'
                 },
+                centered: {
+                  type: 'boolean'
+                },
                 focus: {
                   type: 'string',
                   pattern: '^[0-9.]+,[0-9.]+,[0-9.]+,[0-9.]+(;[0-9.]+,[0-9.]+,[0-9.]+,[0-9.]+)* [0-9.]+ [0-9.]+$'
@@ -96,6 +99,9 @@ const SCHEMA = {
                       id: {
                         type: 'string',
                         pattern: '^[-a-zA-Z0-9._]+$'
+                      },
+                      centered: {
+                        type: 'boolean'
                       },
                       focus: {
                         type: 'string',
@@ -185,6 +191,7 @@ function showHelp() {
       #       - html: "foo <em>bar</em>" /* HTML text of first flow */
       #         seconds: 2               /* Number of seconds to animate */
       #         id: "some"               /* name of *.svg file ('some') to display */
+      #         centered: true           /* whether contents is centered */
       #         focus: "0,0,1000,1000;475,50,300,300;475,50,300,300;475,50,300,300;0,0,1000,1000 .75 4.25"
       #                                  /* viewport definition + animation:
       #                                   * - list of animation keyframes as viewport coordinates x,y,w,h
@@ -246,6 +253,31 @@ function fixIds(contents) {
         if (s.flows) {
           s.flows.forEach(f => {
             f.id = f.id + `__${qualifier++}`;
+          });
+        }    
+      });
+    }
+  });
+  return contents;
+}
+
+function adjustForCentered(contents) {
+  var qualifier = 1;
+  contents.sections.forEach(i => {
+    if (i.flows) {
+      i.flows.forEach(f => {
+        if (f.centered) {
+          f.html = `<span class='slidego-centered'>${f.html}</span>`;
+        }
+      });
+    }
+    if (i.subsections) {
+      i.subsections.forEach(s => {
+        if (s.flows) {
+          s.flows.forEach(f => {
+            if (f.centered) {
+              f.html = `<span class='slidego-centered'>${f.html}</span>`;
+            }
           });
         }    
       });
@@ -410,7 +442,7 @@ function doWrite(dirname) {
   var template = fs.readFileSync(path.resolve(__dirname, 'template.html'), 'utf8');
   var svgs = getSvgReplacementString(dirname);
   var mappings = getAllSvgFilesFromYml(dirname)[1];
-  var narration = fixIds(getYamlAsJson(dirname));
+  var narration = adjustForCentered(fixIds(getYamlAsJson(dirname)));
   removeFocusAndHighlightFromJson(narration);
   var output = template.replace("<!--%SVGS%-->",svgs)
     .replace("%NARRATION%",JSON.stringify(narration,null,2))

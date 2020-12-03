@@ -128,6 +128,7 @@ sections:
   - html: "<b>Circles</b> show up (show all circles) "
     seconds: 2
     id: "first-flow"
+    centered: true
 - flows:
   - html: "Focus on red circle, then unfocus "
     seconds: 5
@@ -240,6 +241,10 @@ Each `id` is the file name (without extension) of the SVG file to use.
 The *seconds* attribute dictates the number of seconds to stay on that slide/*test selection* during playback. 
 
 If set to '0', that slide/*text selection* will be skipped during playback, but it will be navigateable through trick play.
+
+##### `centered` 
+
+A flow can be `centered` (set to `true`).  If so, it will be horizontally centered.
 
 ##### `highlight` Highlighting
 
