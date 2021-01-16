@@ -1,6 +1,6 @@
 {
   "name": "slidego",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "description": "Tool generate slide-shows from SVGs, encapsulated in a single HTML file.",
   "directories": {
     "example": "example"

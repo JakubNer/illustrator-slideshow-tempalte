@@ -189,7 +189,7 @@ function showHelp() {
       #     sections:                    /* array of sections, can have flows and subsections */
       #     - flows:                     /* array of flows */
       #       - html: "foo <em>bar</em>" /* HTML text of first flow */
-      #         seconds: 2               /* Number of seconds to animate */
+      #         seconds: 2               /* Number of seconds to animate (0 to skip/heading) */
       #         id: "some"               /* name of *.svg file ('some') to display */
       #         centered: true           /* whether contents is centered */
       #         focus: "0,0,1000,1000;475,50,300,300;475,50,300,300;475,50,300,300;0,0,1000,1000 .75 4.25"

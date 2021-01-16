@@ -81,6 +81,10 @@ Above, we accomplished the following:
 
 ## Creating Slides
 
+##### SVG File Requirements
+
+The SVG files have to have their *width* and *height* be `1000px` each.
+
 ##### The `./example` slideshow from the repo
 
 This is a brief introduction of creating slides using the `./example` folder of the repository.  To get the `./example` folder onto your filesystem you need the repository, therefore, clone the repository somewhere on your filesystem:
@@ -240,7 +244,7 @@ Each `id` is the file name (without extension) of the SVG file to use.
 
 The *seconds* attribute dictates the number of seconds to stay on that slide/*test selection* during playback. 
 
-If set to '0', that slide/*text selection* will be skipped during playback, but it will be navigateable through trick play.
+If set to '0', that slide/*text selection* will be skipped during playback &mdash; even when navigated to through trick play &mdash; which makes it useful for headings.
 
 ##### `centered` 
 
