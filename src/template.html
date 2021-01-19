@@ -96,7 +96,7 @@
     }    
 
     @media (orientation: portrait) {
-      .container-box {
+      .portrait-container-box {
         height: 2000px;
         width: 1000px;
       }
@@ -119,9 +119,9 @@
   </style>
 
   <div class="slideshow-container">
-    <div class="container-box jj-scalable">
+    <div class="container-box jj-scalable" id="container-box">
       <div class="border-box">
-        <div class="landscape-illustration portrait-illustration" id="illustration-c">
+        <div class="landscape-illustration" id="illustration-c">
           <div class="content-box" id="illustration">
 
 <!--%SVGS%-->
@@ -129,7 +129,7 @@
           </div>  
         </div>
 
-        <div class="landscape-narration portrait-narration" id="narration-c">
+        <div class="landscape-narration" id="narration-c">
           <div class="content-box" id="narration">
           </div>
         </div>
@@ -246,6 +246,14 @@
         delay(200).then(recenter_spans);          
       });
 
+      if (!value.landscapeOnly) {
+        var illustrationContainer = document.getElementById('illustration-c');
+        var narrationContainer = document.getElementById('narration-c');
+        var containerBox = document.getElementById('container-box');
+        illustrationContainer.classList.add("portrait-illustration");
+        narrationContainer.classList.add("portrait-narration");
+        containerBox.classList.add("portrait-container-box");
+      }
       if (value.flipPanes && window.innerWidth > window.innerHeight) {
         var illustrationContainer = document.getElementById('illustration-c');
         var narrationContainer = document.getElementById('narration-c');

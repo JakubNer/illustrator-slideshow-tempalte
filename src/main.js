@@ -42,6 +42,9 @@ const SCHEMA = {
     flipPanes: {
       type: 'boolean'
     },
+    landscapeOnly: {
+      type: 'boolean'
+    },
     sections: {
       type: 'array',
       items: [{
@@ -186,6 +189,7 @@ function showHelp() {
       #     leftBorder: solid 0px
       #     rightBorder: solid 0px
       #     flipPanes: false
+      #     landscapeOnly: true
       #     sections:                    /* array of sections, can have flows and subsections */
       #     - flows:                     /* array of flows */
       #       - html: "foo <em>bar</em>" /* HTML text of first flow */

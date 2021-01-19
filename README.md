@@ -127,6 +127,7 @@ bottomBorder: solid 1px
 leftBorder: solid 0px
 rightBorder: solid 0px
 flipPanes: false
+landscapeOnly: true
 sections:
 - flows:
   - html: "<b>Circles</b> show up (show all circles) "
@@ -211,6 +212,14 @@ In landscape mode:
 - when this value is `true` the illustration is on the right and narration text on the left.  
 
 This property has no effect in portrait mode.
+
+##### Allow Portrait Orientation
+
+```
+landscapeOnly: true
+```
+
+Allows displaying the slideshow in portrait mode: graphic on top, text on bottom.
 
 ##### `html` Text Selections
 
